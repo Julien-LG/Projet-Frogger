@@ -1,6 +1,7 @@
 package frog;
 
 import gameCommons.Game;
+import gameCommons.IEnvironment;
 import gameCommons.IFrog;
 import util.Case;
 import util.Direction;
@@ -29,6 +30,19 @@ public class Frog implements IFrog {
 
 	@Override
 	public void move(Direction key) {
-
+		if (key == Direction.up){
+			//if (isSafe)
+			this.position = new Case(position.absc, position.ord + 1 );
+		}
+		else if (key == Direction.down){
+			this.position = new Case(position.absc, position.ord - 1 );
+		}
+		else if (key == Direction.right){
+			this.position = new Case(position.absc + 1, position.ord);
+		}
+		else if (key == Direction.left){
+			this.position = new Case(position.absc - 1, position.ord);
+		}
+		//this.direction = key;
 	}
 }

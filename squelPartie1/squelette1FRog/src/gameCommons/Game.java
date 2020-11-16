@@ -5,6 +5,7 @@ import java.util.Random;
 
 import graphicalElements.Element;
 import graphicalElements.IFroggerGraphics;
+import util.Case;
 
 public class Game {
 
@@ -76,7 +77,11 @@ public class Game {
 	 * @return true si le partie est perdue
 	 */
 	public boolean testLose() {
-		// TODO
+		//if (frog.getPosition().ord  == or frog.getPosition().absc == ){
+		if (!environment.isSafe(new Case(frog.getPosition().absc, frog.getPosition().ord))) {
+			System.out.println("Perdu !");
+			return true;
+		}
 		return false;
 	}
 
@@ -87,7 +92,15 @@ public class Game {
 	 * @return true si la partie est gagnée
 	 */
 	public boolean testWin() {
-		// TODO
+		/*if (frog. getPosition().ord == height-1){
+			//System.out.println("GG");
+			return true;
+		}
+		return false;*/
+		if (environment.isWinningPosition(new Case(frog.getPosition().absc, frog.getPosition().ord))) {
+			System.out.println("GG !");
+			return true;
+		}
 		return false;
 	}
 
