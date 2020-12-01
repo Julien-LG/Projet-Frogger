@@ -3,13 +3,16 @@ package frog;
 import gameCommons.Game;
 import gameCommons.IEnvironment;
 import gameCommons.IFrog;
+import graphicalElements.Element;
 import util.Case;
 import util.Direction;
+
+import java.awt.*;
 
 public class Frog implements IFrog {
 	
 	private Game game;
-	private Case position;
+	protected Case position;
 	private Direction direction;
 
 	public Frog (Game game) {
@@ -30,8 +33,8 @@ public class Frog implements IFrog {
 
 	@Override
 	public void move(Direction key) {
+		this.direction = key;
 		if (key == Direction.up){
-			//if (isSafe)
 			this.position = new Case(position.absc, position.ord + 1 );
 		}
 		else if (key == Direction.down){
@@ -43,6 +46,8 @@ public class Frog implements IFrog {
 		else if (key == Direction.left){
 			this.position = new Case(position.absc - 1, position.ord);
 		}
-		//this.direction = key;
+		this.game.getGraphic().add(new Element(this.getPosition(), Color.GREEN));
+		this.game.testLose();
+		this.game.testWin();
 	}
 }

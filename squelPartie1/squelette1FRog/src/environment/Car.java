@@ -47,8 +47,20 @@ public class Car {
 			if (this.leftToRight){
 				color = colorLtR;
 			}
-			game.getGraphic()
-					.add(new Element(leftPosition.absc + i, leftPosition.ord, color));
+			game.getGraphic().add(new Element(leftPosition.absc + i, leftPosition.ord, color));
+			/*if (!game.infinityMode) {
+
+				game.getGraphic().add(new Element(leftPosition.absc + i, leftPosition.ord - this.game.score, color));
+			}
+			else {
+				game.getGraphic().add(new Element(leftPosition.absc + i, leftPosition.ord, color));
+			}*/
+			/*if (this.game.infinityMode == true) {
+				game.getGraphic().add(new Element(leftPosition.absc + i, leftPosition.ord - this.game.score, color));
+			}*/
+			//marche pour le mode infini seulement
+			//game.getGraphic().add(new Element(leftPosition.absc + i, leftPosition.ord - this.game.score, color));
+
 		}
 	}
 

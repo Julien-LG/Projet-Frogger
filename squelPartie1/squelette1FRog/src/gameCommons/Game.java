@@ -17,6 +17,12 @@ public class Game {
 	public final int height;
 	public final int minSpeedInTimerLoops;
 	public final double defaultDensity;
+	public int score;
+	public int maxScore;
+	public boolean infinityMode;
+	public int timer;
+	public long debutTimer;
+	public boolean gameEnd;
 
 	// Lien aux objets utilisés
 	private IEnvironment environment;
@@ -35,14 +41,22 @@ public class Game {
 	 *            Vitesse minimale, en nombre de tour de timer avant déplacement
 	 * @param defaultDensity
 	 *            densite de voiture utilisee par defaut pour les routes
+	 * @param infinityMode
+	 *            indique si le jeu est en mode infi si true
 	 */
-	public Game(IFroggerGraphics graphic, int width, int height, int minSpeedInTimerLoop, double defaultDensity) {
+	public Game(IFroggerGraphics graphic, int width, int height, int minSpeedInTimerLoop, double defaultDensity, boolean infinityMode) {
 		super();
 		this.graphic = graphic;
 		this.width = width;
 		this.height = height;
 		this.minSpeedInTimerLoops = minSpeedInTimerLoop;
 		this.defaultDensity = defaultDensity;
+		this.score = 0;
+		this.maxScore = 0;
+		this.infinityMode = infinityMode;
+		this.timer = 0;
+		this.debutTimer = System.currentTimeMillis();
+		this.gameEnd = false;
 	}
 
 	/**
@@ -81,7 +95,13 @@ public class Game {
 		//if (frog.getPosition().ord  == or frog.getPosition().absc == ){
 		if (!environment.isSafe(new Case(frog.getPosition().absc, frog.getPosition().ord))) {
 			//System.out.println("Perdu !");
-			graphic.endGameScreen("Perdu !");
+			if (infinityMode) {
+				graphic.endGameScreen("Perdu ! \n Score :" + maxScore + "\n Temps: " + timer + "s");
+			}
+			else {
+				graphic.endGameScreen("Perdu ! \n Temps: " + timer + "s");
+			}
+			gameEnd = true;
 			return true;
 		}
 		return false;
@@ -96,10 +116,22 @@ public class Game {
 	public boolean testWin() {
 		if (environment.isWinningPosition(new Case(frog.getPosition().absc, frog.getPosition().ord))) {
 			//System.out.println("GG !");
-			graphic.endGameScreen("GG !");
+			graphic.endGameScreen("GG ! \n Temps: " + timer);
+			gameEnd = true;
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Actualise le timer si la partie n'est pas finie
+	 */
+	public void updateTimer() {
+		if (!gameEnd) {
+			if (this.timer < (System.currentTimeMillis()-debutTimer)/1000) {
+				this.timer = (int) ((System.currentTimeMillis()-debutTimer) / 1000);
+			}
+		}
 	}
 
 	/**
@@ -109,9 +141,17 @@ public class Game {
 	public void update() {
 		graphic.clear();
 		environment.update();
-		this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
+		if (infinityMode) {
+			this.graphic.add(new Element(frog.getPosition().absc, 1, Color.GREEN));
+		}
+		else {
+			this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
+		}
 		testLose();
 		testWin();
+		updateTimer();
 	}
-
+	public void addRoad() {
+		this.environment.addRoad();
+	}
 }

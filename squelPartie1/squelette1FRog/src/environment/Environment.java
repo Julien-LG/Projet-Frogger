@@ -11,6 +11,7 @@ public class Environment implements IEnvironment {
 
     private Game game;
     private ArrayList<Lane> roads = new ArrayList<>();
+    //protected ArrayList<Lane> roads = new ArrayList<>();
 
     public Environment(Game game){
         this.game = game;
@@ -36,5 +37,8 @@ public class Environment implements IEnvironment {
         for (Lane lane: this.roads) {
             lane.update();
         }
+    }
+    public void addRoad() {
+
     }
 }

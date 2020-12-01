@@ -27,4 +27,8 @@ public interface IEnvironment {
 	 */
 	public void update();
 
+	/**
+	 * Ajoute une route tout en haut du tableau de route
+	 */
+	public void addRoad();
 }
