@@ -114,9 +114,9 @@ public class Game {
 	 * @return true si la partie est gagnée
 	 */
 	public boolean testWin() {
-		if (environment.isWinningPosition(new Case(frog.getPosition().absc, frog.getPosition().ord))) {
+		if (environment.isWinningPosition(frog.getPosition() /*new Case(frog.getPosition().absc, frog.getPosition().ord)*/)) {
 			//System.out.println("GG !");
-			graphic.endGameScreen("GG ! \n Temps: " + timer);
+			graphic.endGameScreen("GG ! \n Temps: " + timer + "s");
 			gameEnd = true;
 			return true;
 		}
@@ -142,10 +142,10 @@ public class Game {
 		graphic.clear();
 		environment.update();
 		if (infinityMode) {
-			this.graphic.add(new Element(frog.getPosition().absc, 1, Color.GREEN));
+			this.graphic.add(new Element(frog.getPosition().absc, 1, Color.GREEN, frog.getSprit()));
 		}
 		else {
-			this.graphic.add(new Element(frog.getPosition(), Color.GREEN));
+			this.graphic.add(new Element(frog.getPosition(), Color.GREEN, frog.getSprit()));
 		}
 		testLose();
 		testWin();

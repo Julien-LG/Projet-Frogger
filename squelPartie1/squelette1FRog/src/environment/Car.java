@@ -1,10 +1,15 @@
 package environment;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 import util.Case;
 import gameCommons.Game;
 import graphicalElements.Element;
+
+import javax.imageio.ImageIO;
 
 public class Car {
 	private Game game;
@@ -13,6 +18,15 @@ public class Car {
 	private int length;
 	private final Color colorLtR = Color.BLACK;;
 	private final Color colorRtL = Color.BLUE;
+	private BufferedImage sprit = null;
+
+	/*private BufferedImage frogSprit = null;
+	private BufferedImage rightCarSprit = null;
+	private BufferedImage leftCarSprit = null;
+	private BufferedImage rightCar2Sprit = null;
+	private BufferedImage leftCar2Sprit = null;
+	private BufferedImage rightCar3Sprit = null;
+	private BufferedImage leftCar3Sprit = null;*/
 
 	//TODO Constructeur(s)
 	public Car(Game game, Case frontPosition, boolean leftToRight) {
@@ -20,9 +34,69 @@ public class Car {
 		this.length = game.randomGen.nextInt(3) /*+ 1*/;
 		this.leftPosition = new Case(frontPosition.absc - this.length, frontPosition.ord);
 		this.leftToRight = leftToRight;
+		this.sprit = spritGenerator();
 	}
 
 	//TODO : ajout de methodes
+
+	public BufferedImage spritGenerator() {
+		BufferedImage sprit = null;
+		int random = game.randomGen.nextInt(3);
+		/*if (leftToRight) {
+			switch (random) {
+				case 0:
+					return ImageIO.read(new File("leftCar.png"));
+				case 1:
+					return ImageIO.read(new File("leftCar2.png"));
+				case 2:
+					return ImageIO.read(new File("leftCar3.png"));
+			}
+		}
+		else {
+			switch (random) {
+				case 0:
+					return ImageIO.read(new File("rightCar.png"));
+				case 1:
+					return ImageIO.read(new File("rightCar2.png"));
+				case 2:
+					return ImageIO.read(new File("rightCar3.png"));
+			}
+		}*/
+		String spritName = "";
+		if (leftToRight) {
+			switch (random) {
+				case 0:
+					spritName = "leftCar.png";
+					break;
+				case 1:
+					spritName ="leftCar2.png";
+					break;
+				case 2:
+					spritName ="leftCar3.png";
+					break;
+			}
+		}
+		else {
+			switch (random) {
+				case 0:
+					spritName ="rightCar.png";
+					break;
+				case 1:
+					spritName ="rightCar2.png";
+					break;
+				case 2:
+					spritName ="rightCar3.png";
+					break;
+			}
+		}
+
+		try {
+			sprit = ImageIO.read(new File(spritName));
+		} catch (IOException ioException) {
+			System.out.println(ioException);
+		}
+		return sprit;
+	}
 
 	public void displace(boolean b) {
 		if (b) {
@@ -47,7 +121,7 @@ public class Car {
 			if (this.leftToRight){
 				color = colorLtR;
 			}
-			game.getGraphic().add(new Element(leftPosition.absc + i, leftPosition.ord, color));
+			game.getGraphic().add(new Element(leftPosition.absc + i, leftPosition.ord, color, sprit));
 			/*if (!game.infinityMode) {
 
 				game.getGraphic().add(new Element(leftPosition.absc + i, leftPosition.ord - this.game.score, color));

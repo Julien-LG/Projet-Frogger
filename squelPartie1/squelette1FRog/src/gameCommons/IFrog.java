@@ -3,6 +3,8 @@ package gameCommons;
 import util.Case;
 import util.Direction;
 
+import java.awt.image.BufferedImage;
+
 public interface IFrog {
 	
 	/**
@@ -16,7 +18,10 @@ public interface IFrog {
 	 * @return
 	 */
 	public Direction getDirection();
-	
+
+
+	public BufferedImage getSprit();
+
 	/**
 	 * Déplace la grenouille dans la direction donnée et teste la fin de partie
 	 * @param key
@@ -24,4 +29,5 @@ public interface IFrog {
 	public void move(Direction key);
 
 	//public boolean goUp();
+
 }

@@ -17,9 +17,14 @@ import graphicalElements.IFroggerGraphics;
 public class Main {
 
 	public static void main(String[] args) {
-
+		boolean infinityMode = false;
+		if (args.length != 0) {
+			System.out.println(args[0]);
+			infinityMode = true;
+		}
 		//Caractéristiques du jeu
-		boolean infinityMode = true;
+		//boolean infinityMode = true;
+
 		int width = 26;
 		int height = 20;
 		if (infinityMode) {
