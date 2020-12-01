@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="projetFrogger:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/projetFrogger_jar</output-path>
+    <root id="archive" name="projetFrogger.jar">
+      <element id="module-output" name="projetFrogger" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/squelPartie1/squelette1FRog/givenEnvironment.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
