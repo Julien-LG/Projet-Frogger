@@ -18,7 +18,7 @@ public class Car {
 	private int length;
 	private final Color colorLtR = Color.BLACK;;
 	private final Color colorRtL = Color.BLUE;
-	private BufferedImage sprit = null;
+	private BufferedImage sprite = null;
 
 	/*private BufferedImage frogSprit = null;
 	private BufferedImage rightCarSprit = null;
@@ -34,13 +34,13 @@ public class Car {
 		this.length = game.randomGen.nextInt(3) /*+ 1*/;
 		this.leftPosition = new Case(frontPosition.absc - this.length, frontPosition.ord);
 		this.leftToRight = leftToRight;
-		this.sprit = spritGenerator();
+		this.sprite = spriteGenerator();
 	}
 
 	//TODO : ajout de methodes
 
-	public BufferedImage spritGenerator() {
-		BufferedImage sprit = null;
+	public BufferedImage spriteGenerator() {
+		BufferedImage spriteGen = null;
 		int random = game.randomGen.nextInt(3);
 		/*if (leftToRight) {
 			switch (random) {
@@ -62,40 +62,40 @@ public class Car {
 					return ImageIO.read(new File("rightCar3.png"));
 			}
 		}*/
-		String spritName = "";
+		String spriteName = "";
 		if (leftToRight) {
 			switch (random) {
 				case 0:
-					spritName = "leftCar.png";
+					spriteName = "leftCar.png";
 					break;
 				case 1:
-					spritName ="leftCar2.png";
+					spriteName ="leftCar2.png";
 					break;
 				case 2:
-					spritName ="leftCar3.png";
+					spriteName ="leftCar3.png";
 					break;
 			}
 		}
 		else {
 			switch (random) {
 				case 0:
-					spritName ="rightCar.png";
+					spriteName ="rightCar.png";
 					break;
 				case 1:
-					spritName ="rightCar2.png";
+					spriteName ="rightCar2.png";
 					break;
 				case 2:
-					spritName ="rightCar3.png";
+					spriteName ="rightCar3.png";
 					break;
 			}
 		}
 
 		try {
-			sprit = ImageIO.read(new File(spritName));
+			spriteGen = ImageIO.read(new File(spriteName));
 		} catch (IOException ioException) {
 			System.out.println(ioException);
 		}
-		return sprit;
+		return spriteGen;
 	}
 
 	public void displace(boolean b) {
@@ -121,7 +121,7 @@ public class Car {
 			if (this.leftToRight){
 				color = colorLtR;
 			}
-			game.getGraphic().add(new Element(leftPosition.absc + i, leftPosition.ord, color, sprit));
+			game.getGraphic().add(new Element(leftPosition.absc + i, leftPosition.ord, color, sprite));
 			/*if (!game.infinityMode) {
 
 				game.getGraphic().add(new Element(leftPosition.absc + i, leftPosition.ord - this.game.score, color));

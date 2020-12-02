@@ -53,7 +53,6 @@ public class Lane {
 	}
 
 	public void update() {
-
 		// TODO
 		this.tic++;
 		if (this.tic <= this.speed) {

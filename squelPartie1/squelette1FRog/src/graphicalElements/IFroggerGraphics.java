@@ -25,7 +25,23 @@ public interface IFroggerGraphics {
      * @param frog
      */
     public void setFrog(IFrog frog);
-    
+
+    /**
+     * Récupére les scores pour pouvoir y accéder dans FroggerGraphics
+     * @param maxScore Le plus haut score actuel
+     * @param bestScore Le meilleur score des précédente parties
+     */
+    public void getScore(int maxScore, int bestScore);
+
+    /**
+     * Affiche l'état actuel des scores de la partie
+     */
+    public void scoreScreen();
+
+
+
+    //public  void testLable();
+
     /**
      * Lance un écran de fin de partie
      * @param message le texte à afficher

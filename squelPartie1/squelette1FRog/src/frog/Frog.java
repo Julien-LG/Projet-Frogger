@@ -18,7 +18,7 @@ public class Frog implements IFrog {
 	private Game game;
 	protected Case position;
 	private Direction direction;
-	private BufferedImage sprit = null;
+	private BufferedImage sprite = null;
 
 	public Frog (Game game) {
 		this.game = game;
@@ -26,7 +26,7 @@ public class Frog implements IFrog {
 		this.direction = Direction.up;
 
 		try {
-			this.sprit = ImageIO.read(new File("frog.png"));
+			this.sprite = ImageIO.read(new File("frog.png"));
 		} catch (IOException ioException) {
 			System.out.println(ioException);
 		}
@@ -42,8 +42,8 @@ public class Frog implements IFrog {
 		return this.direction;
 	}
 
-	public BufferedImage getSprit() {
-		return this.sprit;
+	public BufferedImage getSprite() {
+		return this.sprite;
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class Frog implements IFrog {
 		else if (key == Direction.left){
 			this.position = new Case(position.absc - 1, position.ord);
 		}
-		this.game.getGraphic().add(new Element(this.getPosition(), Color.GREEN, this.sprit));
+		this.game.getGraphic().add(new Element(this.getPosition(), Color.GREEN, this.sprite));
 		this.game.testLose();
 		this.game.testWin();
 	}

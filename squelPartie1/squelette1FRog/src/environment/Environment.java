@@ -37,6 +37,8 @@ public class Environment implements IEnvironment {
         for (Lane lane: this.roads) {
             lane.update();
         }
+
+        //game.getGraphic().test();
     }
     public void addRoad() {
 

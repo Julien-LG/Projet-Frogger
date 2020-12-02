@@ -17,7 +17,7 @@ import graphicalElements.IFroggerGraphics;
 public class Main {
 
 	public static void main(String[] args) {
-		boolean infinityMode = false;
+		boolean infinityMode = true;
 		if (args.length != 0) {
 			System.out.println(args[0]);
 			infinityMode = true;

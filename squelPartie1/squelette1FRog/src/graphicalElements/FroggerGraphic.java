@@ -26,6 +26,11 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	private int height;
 	private IFrog frog;
 	private JFrame frame;
+	//private JLabel labelScore;
+
+	private int score = 0;
+	private int bestScore = 0;
+
 
 	/*private BufferedImage frogSprit = null;
 	private BufferedImage rightCar = null;
@@ -45,6 +50,16 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 
 		JFrame frame = new JFrame("Frogger");
 		this.frame = frame;
+		//this.labelScore = new JLabel("");
+
+
+
+		//this.test();
+		//this.testLable();
+
+
+
+
 		//ImageIcon logo = new ImageIcon("/frogger.ico");/src/image
 		//ImageIcon logo = new ImageIcon("/src/image/frogger.ico");
 		ImageIcon logo = new ImageIcon("frog.png");
@@ -72,6 +87,7 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Random randomGen = new Random();
+		this.scoreScreen();
 		for (Element e : elementsToDisplay) {
 
 			//ImageIcon spriteFrog = new ImageIcon("frog.png");
@@ -121,6 +137,42 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 			}*/
 			g2d.drawImage(e.sprit, pixelByCase * e.absc,pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase, null);
 		}
+		/*JButton button = new JButton("Test");
+		button.setBounds(505,255,150,40);
+		//frame.add(button);
+		frame.getContentPane().add(button);
+		button.repaint();
+
+		 //Affichage d'une textBox fonctionnel
+		JTextField field = new JTextField();
+		field.setBounds(1,1,100,100);
+		field.setText("ALED");
+		field.setForeground(Color.GREEN);
+		field.setBackground(Color.GRAY);
+		field.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		//field.setOpaque(false);
+		frame.getContentPane().add(field);
+		field.repaint();*/
+
+		/*JLabel lab = new JLabel();
+		lab.setFont(new Font("Verdana", 1, 20));
+		lab.setBounds(1,1,100,100);
+		lab.setText("Score : 01");
+		lab.setForeground(Color.GREEN);
+		frame.getContentPane().add(lab);
+		lab.repaint();*/
+
+
+		/*JLabel label = new JLabel("TESTETSTTSTSTSTS");
+		label.setFont(new Font("Verdana", 1, 20));
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setForeground(Color.GREEN);
+		label.setSize(this.getSize());
+		frame.getContentPane().add(label);*/
+		//frame.add(new Label("ALED PLS"));
+		//frame.repaint();
+		//label.repaint();
+		//frame.add(label);
 	}
 
 	public void keyTyped(KeyEvent e) {
@@ -156,6 +208,84 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	public void setFrog(IFrog frog) {
 		this.frog = frog;
 	}
+
+	public void getScore(int maxScore, int bestScore) {
+		/*this.labelScore.setText("Score : " + maxScore + "\n Best Score : " + bestScore);
+		//JLabel labelScore = new JLabel("Score : " + maxScore + "\n Best Score : " + bestScore);
+		labelScore.setFont(new Font("Verdana", 1, 20));
+		labelScore.setForeground(Color.GREEN);
+		labelScore.setVerticalAlignment(SwingConstants.TOP);
+		labelScore.setHorizontalAlignment(SwingConstants.LEFT);
+		labelScore.setSize(this.getSize());
+		//frame.getContentPane().add(labelScore);
+		frame.add(labelScore);
+		labelScore.repaint();*/
+		this.score = maxScore;
+		this.bestScore = bestScore;
+	}
+
+	public void scoreScreen() {
+		/*JButton button = new JButton("Test");
+		button.setBounds(150,50,150,40);
+		frame.add(button);
+		button.repaint();
+
+		JLabel lab = new JLabel("TESTETSTTSTSTSTS");
+		lab.setFont(new Font("Verdana", 1, 20));
+		lab.setForeground(Color.GREEN);
+		lab.setHorizontalAlignment(SwingConstants.CENTER);
+		frame.add(lab);
+		lab.repaint();*/
+		JTextField field = new JTextField();
+		field.setBounds(1,1,210,100);
+		field.setFont(new Font("Verdana", 1, 15));
+		//field.setText("ALED");
+		field.setText("Score : " + this.score + "\n Best Score : " + this.bestScore);
+
+		field.setForeground(Color.GREEN);
+		field.setBackground(Color.GRAY);
+		field.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		//field.setOpaque(false);
+		frame.getContentPane().add(field);
+		field.repaint();
+	}
+
+	/*public  void testLable() {
+		/*frame.remove(this);
+		JLabel lab = new JLabel("TESTETSTTSTSTSTS");
+		lab.setFont(new Font("Verdana", 1, 20));
+		lab.setForeground(Color.GREEN);
+		lab.setVerticalAlignment(SwingConstants.TOP);
+		lab.setHorizontalAlignment(SwingConstants.LEFT);
+		//lab.setHorizontalAlignment(SwingConstants.CENTER);
+		//frame.add(lab);
+		frame.getContentPane().add(lab);
+		lab.repaint();*/
+
+
+
+		/*JPanel pan = new JPanel();
+		pan.setLayout(new FlowLayout());
+		JLabel l = new JLabel("TEST TEST TEST");
+		//l.setText("TEST TEST TEST");
+		//l.setHorizontalAlignment(SwingConstants.CENTER);
+		pan.add(l);*/
+
+
+		/*Label la = new Label("TEST TEST TEST", Label.CENTER);
+		la.*/
+		//la.setText("TEST TEST TEST");
+
+		/*frame.remove(this);
+
+		JLabel label = new JLabel("TESTETSTTSTSTSTS");
+		label.setFont(new Font("Verdana", 1, 20));
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setSize(this.getSize());
+		frame.getContentPane().add(label);
+
+
+	}*/
 
 	public void endGameScreen(String s) {
 		frame.remove(this);

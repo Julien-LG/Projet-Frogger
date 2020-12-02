@@ -19,8 +19,11 @@ public interface IFrog {
 	 */
 	public Direction getDirection();
 
-
-	public BufferedImage getSprit();
+	/**
+	 * Donne l'image (sprite) de la grenouille
+	 * @return
+	 */
+	public BufferedImage getSprite();
 
 	/**
 	 * Déplace la grenouille dans la direction donnée et teste la fin de partie
