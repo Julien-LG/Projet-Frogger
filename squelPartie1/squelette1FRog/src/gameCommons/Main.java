@@ -17,7 +17,7 @@ import graphicalElements.IFroggerGraphics;
 public class Main {
 
 	public static void main(String[] args) {
-		boolean infinityMode = true;
+		boolean infinityMode = false;
 		if (args.length != 0) {
 			System.out.println(args[0]);
 			infinityMode = true;
@@ -36,7 +36,7 @@ public class Main {
 
 		
 		//Création de l'interface graphique
-		IFroggerGraphics graphic = new FroggerGraphic(width, height);
+		IFroggerGraphics graphic = new FroggerGraphic(width, height, infinityMode);
 		//Création de la partie
 		Game game = new Game(graphic, width, height, minSpeedInTimerLoops, defaultDensity, infinityMode);
 		//Création et liason de la grenouille

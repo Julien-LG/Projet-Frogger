@@ -2,6 +2,7 @@ package environment;
 
 import java.util.ArrayList;
 
+import graphicalElements.Element;
 import util.Case;
 import gameCommons.Game;
 import gameCommons.IEnvironment;
@@ -39,6 +40,9 @@ public class Environment implements IEnvironment {
         }
 
         //game.getGraphic().test();
+    }
+    public ArrayList<LaneInf> getRoads() {
+        return new ArrayList<LaneInf>();
     }
     public void addRoad() {
 

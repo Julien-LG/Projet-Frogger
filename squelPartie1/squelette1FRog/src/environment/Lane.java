@@ -1,5 +1,6 @@
 package environment;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import gameCommons.IEnvironment;
@@ -14,6 +15,8 @@ public class Lane {
 	private ArrayList<Car> cars = new ArrayList<>(); //new ArrayList<Car>(); ??? c'est une proposition, le code de base c'est l'autre qui n'est pas en commentaire
 	private boolean leftToRight;
 	private double density;
+	/*private boolean colorRoad;
+	private BufferedImage sprite = null;*/
 	private int tic = 0; //les tic de l'horloge
 
 	// TODO : Constructeur(s)

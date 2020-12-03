@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import environment.EnvInf;
 import graphicalElements.Element;
 import graphicalElements.FroggerGraphic;
 import graphicalElements.IFroggerGraphics;
@@ -254,6 +255,8 @@ public class Game {
 		//graphic.test();
 		//graphic.scoreScreen(maxScore, bestScore);
 		//graphic.testLable();
+
+		/*graphic.addRoads(environment.getRoads());*/
 
 		environment.update();
 		if (infinityMode) {

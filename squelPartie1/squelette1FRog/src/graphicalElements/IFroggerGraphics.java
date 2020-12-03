@@ -1,6 +1,9 @@
 package graphicalElements;
 
+import environment.LaneInf;
 import gameCommons.IFrog;
+
+import java.util.ArrayList;
 
 public interface IFroggerGraphics {
 	
@@ -9,6 +12,8 @@ public interface IFroggerGraphics {
 	 * @param e
 	 */
     public void add(Element e);
+
+    /*public void addRoads(ArrayList<LaneInf> roads);*/
     
     /**
      * Enlève tous les éléments actuellement affichés

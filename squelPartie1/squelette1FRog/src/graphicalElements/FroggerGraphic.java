@@ -3,6 +3,7 @@ package graphicalElements;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import environment.LaneInf;
 import gameCommons.IFrog;
 import util.Direction;
 
@@ -12,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,15 +23,18 @@ import java.util.Random;
 
 public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListener {
 	private ArrayList<Element> elementsToDisplay;
+	//private ArrayList<LaneInf> roadsToDisplay;
 	private int pixelByCase = 32;
 	private int width;
 	private int height;
 	private IFrog frog;
 	private JFrame frame;
+	private boolean infinity;
 	//private JLabel labelScore;
 
 	private int score = 0;
 	private int bestScore = 0;
+
 
 
 	/*private BufferedImage frogSprit = null;
@@ -40,10 +45,11 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	private BufferedImage rightCar3 = null;
 	private BufferedImage leftCar3 = null;*/
 
-	public FroggerGraphic(int width, int height) {
+	public FroggerGraphic(int width, int height, boolean infinity) {
 		this.width = width;
 		this.height = height;
 		elementsToDisplay = new ArrayList<Element>();
+		this.infinity = infinity;
 
 		setBackground(Color.GRAY);
 		setPreferredSize(new Dimension(width * pixelByCase, height * pixelByCase));
@@ -51,13 +57,6 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		JFrame frame = new JFrame("Frogger");
 		this.frame = frame;
 		//this.labelScore = new JLabel("");
-
-
-
-		//this.test();
-		//this.testLable();
-
-
 
 
 		//ImageIcon logo = new ImageIcon("/frogger.ico");/src/image
@@ -69,6 +68,7 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		frame.pack();
 		frame.setVisible(true);
 		frame.addKeyListener(this);
+
 
 
 		/*try {
@@ -86,8 +86,45 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		Random randomGen = new Random();
+		//Random randomGen = new Random();
 		this.scoreScreen();
+
+
+
+		BufferedImage colorLane = null;
+		BufferedImage colorRoad = null;
+		try {
+			colorLane = ImageIO.read(new File("colorLane.png"));
+			colorRoad = ImageIO.read(new File("colorRoad.png"));
+		} catch (IOException ioException) {
+			ioException.printStackTrace();
+		}
+
+		Graphics2D g2d2 = (Graphics2D) g;
+		/*g2d2.drawImage(colorLane, 0/, 26*pixelByCase,26*pixelByCase,pixelByCase,null);
+		g2d2.drawImage(colorRoad, 0, 25*pixelByCase,26*pixelByCase,pixelByCase,null);
+		g2d2.drawImage(colorRoad, 0, 24*pixelByCase,26*pixelByCase,pixelByCase,null);*/
+
+		/*for (LaneInf l : roadsToDisplay) {
+			g2d2.drawImage(l.getSprite(), 0, l.getOrd()*pixelByCase,26*pixelByCase,pixelByCase,null);
+		}*/
+		if (this.infinity) {
+			//Affiche uniquement des routes (pour le mode infinity)
+			for (int i = 0; i < height; i++) {
+				g2d2.drawImage(colorRoad, 0, i*pixelByCase,26*pixelByCase,pixelByCase,null);
+			}
+		}
+		else {
+			g2d2.drawImage(colorLane, 0, 0*pixelByCase,26*pixelByCase,pixelByCase,null);
+			for (int i = 1; i < height-1; i++) {
+				g2d2.drawImage(colorRoad, 0, i*pixelByCase,26*pixelByCase,pixelByCase,null);
+			}
+			//g2d2.drawImage(colorLane, 0, 19*pixelByCase,26*pixelByCase,pixelByCase,null);
+			g2d2.drawImage(colorLane, 0, (height-1)*pixelByCase,26*pixelByCase,pixelByCase,null);
+		}
+
+
+
 		for (Element e : elementsToDisplay) {
 
 			//ImageIcon spriteFrog = new ImageIcon("frog.png");
@@ -135,8 +172,13 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 				}*/
 				/*g2d.drawImage(rightCar, pixelByCase * e.absc,pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase, null);
 			}*/
+
 			g2d.drawImage(e.sprit, pixelByCase * e.absc,pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase, null);
+			//g2d.drawImage(colorLane, 13, 0,26,pixelByCase,null);
+
 		}
+
+
 		/*JButton button = new JButton("Test");
 		button.setBounds(505,255,150,40);
 		//frame.add(button);
@@ -204,6 +246,10 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	public void add(Element e) {
 		this.elementsToDisplay.add(e);
 	}
+
+	/*public void addRoads( ArrayList<LaneInf> roads) {
+		this.roadsToDisplay = roads;
+	}*/
 
 	public void setFrog(IFrog frog) {
 		this.frog = frog;

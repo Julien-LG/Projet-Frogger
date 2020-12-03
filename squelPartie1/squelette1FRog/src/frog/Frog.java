@@ -8,6 +8,7 @@ import util.Case;
 import util.Direction;
 
 import javax.imageio.ImageIO;
+import javax.swing.text.Position;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -49,16 +50,16 @@ public class Frog implements IFrog {
 	@Override
 	public void move(Direction key) {
 		this.direction = key;
-		if (key == Direction.up){
+		if (key == Direction.up && this.position.ord < game.height-1){
 			this.position = new Case(position.absc, position.ord + 1 );
 		}
-		else if (key == Direction.down){
+		else if (key == Direction.down && this.position.ord > 0){
 			this.position = new Case(position.absc, position.ord - 1 );
 		}
-		else if (key == Direction.right){
+		else if (key == Direction.right && this.position.absc < game.width-1){
 			this.position = new Case(position.absc + 1, position.ord);
 		}
-		else if (key == Direction.left){
+		else if (key == Direction.left && this.position.absc > 0){
 			this.position = new Case(position.absc - 1, position.ord);
 		}
 		this.game.getGraphic().add(new Element(this.getPosition(), Color.GREEN, this.sprite));

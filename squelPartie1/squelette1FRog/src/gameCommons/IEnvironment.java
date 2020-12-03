@@ -1,6 +1,10 @@
 package gameCommons;
 
+import environment.LaneInf;
+import graphicalElements.Element;
 import util.Case;
+
+import java.util.ArrayList;
 
 public interface IEnvironment {
 
@@ -27,6 +31,7 @@ public interface IEnvironment {
 	 */
 	public void update();
 
+	public ArrayList<LaneInf> getRoads();
 	/**
 	 * Ajoute une route tout en haut du tableau de route
 	 */
