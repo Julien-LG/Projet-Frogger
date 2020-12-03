@@ -17,10 +17,18 @@ import graphicalElements.IFroggerGraphics;
 public class Main {
 
 	public static void main(String[] args) {
-		boolean infinityMode = false;
+		boolean infinityMode = true;
+		boolean timerMode = false;
+		//Temps en secondes de la durée d'une partie (utilisé seulement si timerMode == true)
+		int gameTime = 60;
 		if (args.length != 0) {
 			System.out.println(args[0]);
 			infinityMode = true;
+		}
+
+		//Il n'y a pas de timerMode en dans le mode classique
+		if (!infinityMode) {
+			timerMode = false;
 		}
 		//Caractéristiques du jeu
 		//boolean infinityMode = true;
@@ -36,9 +44,9 @@ public class Main {
 
 		
 		//Création de l'interface graphique
-		IFroggerGraphics graphic = new FroggerGraphic(width, height, infinityMode);
+		IFroggerGraphics graphic = new FroggerGraphic(width, height, infinityMode, timerMode);
 		//Création de la partie
-		Game game = new Game(graphic, width, height, minSpeedInTimerLoops, defaultDensity, infinityMode);
+		Game game = new Game(graphic, width, height, minSpeedInTimerLoops, defaultDensity, infinityMode, timerMode, gameTime);
 		//Création et liason de la grenouille
 		IFrog frog;
 		if (infinityMode) {

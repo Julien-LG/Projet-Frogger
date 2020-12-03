@@ -30,11 +30,16 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	private IFrog frog;
 	private JFrame frame;
 	private boolean infinity;
+	private boolean timerMode;
+	private int classiqueScore;
+	private int timeLeft = 60;
 	//private JLabel labelScore;
 
 	private int score = 0;
 	private int bestScore = 0;
 
+	BufferedImage colorLane = null;
+	BufferedImage colorRoad = null;
 
 
 	/*private BufferedImage frogSprit = null;
@@ -45,11 +50,12 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	private BufferedImage rightCar3 = null;
 	private BufferedImage leftCar3 = null;*/
 
-	public FroggerGraphic(int width, int height, boolean infinity) {
+	public FroggerGraphic(int width, int height, boolean infinity, boolean timerMode) {
 		this.width = width;
 		this.height = height;
 		elementsToDisplay = new ArrayList<Element>();
 		this.infinity = infinity;
+		this.timerMode = timerMode;
 
 		setBackground(Color.GRAY);
 		setPreferredSize(new Dimension(width * pixelByCase, height * pixelByCase));
@@ -70,6 +76,12 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		frame.addKeyListener(this);
 
 
+		try {
+			colorLane = ImageIO.read(new File("colorLane.png"));
+			colorRoad = ImageIO.read(new File("colorRoad.png"));
+		} catch (IOException ioException) {
+			ioException.printStackTrace();
+		}
 
 		/*try {
 			frogSprit = ImageIO.read(new File("frog.png"));
@@ -88,17 +100,6 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		super.paintComponent(g);
 		//Random randomGen = new Random();
 		this.scoreScreen();
-
-
-
-		BufferedImage colorLane = null;
-		BufferedImage colorRoad = null;
-		try {
-			colorLane = ImageIO.read(new File("colorLane.png"));
-			colorRoad = ImageIO.read(new File("colorRoad.png"));
-		} catch (IOException ioException) {
-			ioException.printStackTrace();
-		}
 
 		Graphics2D g2d2 = (Graphics2D) g;
 		/*g2d2.drawImage(colorLane, 0/, 26*pixelByCase,26*pixelByCase,pixelByCase,null);
@@ -270,6 +271,19 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		this.bestScore = bestScore;
 	}
 
+	public void getTimer(int timer, int gameTime) {
+		if (timerMode) {
+			if (timeLeft >= 0) {
+				this.timeLeft = gameTime - timer;
+			}
+		}
+		else {
+			this.classiqueScore = timer;
+		}
+
+
+	}
+
 	public void scoreScreen() {
 		/*JButton button = new JButton("Test");
 		button.setBounds(150,50,150,40);
@@ -283,10 +297,16 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		frame.add(lab);
 		lab.repaint();*/
 		JTextField field = new JTextField();
-		field.setBounds(1,1,210,100);
-		field.setFont(new Font("Verdana", 1, 15));
+		field.setBounds(0,0,240,32);
+		field.setFont(new Font("Verdana", 1, 13));
 		//field.setText("ALED");
-		field.setText("Score : " + this.score + "\n Best Score : " + this.bestScore);
+		if (infinity) {
+			field.setText("Score : " + this.score + "\t Best Score : " + this.bestScore);
+		}
+		else {
+			field.setText("Score : " + this.classiqueScore + "\t Best Score : " + this.bestScore);
+		}
+
 
 		field.setForeground(Color.GREEN);
 		field.setBackground(Color.GRAY);
@@ -294,7 +314,34 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		//field.setOpaque(false);
 		frame.getContentPane().add(field);
 		field.repaint();
+
+
+		if (timerMode) {
+			JTextField timeField = new JTextField();
+			timeField.setBounds(20*pixelByCase,0,100,32);
+			timeField.setFont(new Font("Verdana", 1, 13));
+			timeField.setText("Time left :" + this.timeLeft);
+
+			timeField.setForeground(Color.GREEN);
+			timeField.setBackground(Color.GRAY);
+			timeField.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+			frame.getContentPane().add(timeField);
+			timeField.repaint();
+		}
 	}
+
+	/*public void timeScreen() {
+		JTextField timeField = new JTextField();
+		timeField.setBounds(width,0,100,32);
+		timeField.setFont(new Font("Verdana", 1, 13));
+		timeField.setText("Time left :" + this.timeLeft);
+
+		timeField.setForeground(Color.GREEN);
+		timeField.setBackground(Color.GRAY);
+		timeField.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		frame.getContentPane().add(timeField);
+		timeField.repaint();
+	}*/
 
 	/*public  void testLable() {
 		/*frame.remove(this);

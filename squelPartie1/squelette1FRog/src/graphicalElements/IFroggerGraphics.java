@@ -32,11 +32,18 @@ public interface IFroggerGraphics {
     public void setFrog(IFrog frog);
 
     /**
-     * Récupére les scores pour pouvoir y accéder dans FroggerGraphics
+     * Récupére les scores pour pouvoir y accéder dans FroggerGraphics et l'afficher
      * @param maxScore Le plus haut score actuel
      * @param bestScore Le meilleur score des précédente parties
      */
     public void getScore(int maxScore, int bestScore);
+
+    /**
+     * Récupére le timer pour pouvoir y accéder dans FroggerGraphics et l'afficher
+     * @param timer La durée actuelle de la partie (en seconde)
+     * @param gameTime Le temps max que doit duré une partie
+     */
+    public void getTimer(int timer, int gameTime);
 
     /**
      * Affiche l'état actuel des scores de la partie

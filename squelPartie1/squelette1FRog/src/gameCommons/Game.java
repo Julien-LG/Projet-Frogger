@@ -27,6 +27,8 @@ public class Game {
 	public int maxScore;
 	public int bestScore;
 	public boolean infinityMode;
+	public boolean timerMode;
+	public int gameTime;
 	public int timer;
 	public long debutTimer;
 	public boolean gameEnd;
@@ -51,7 +53,7 @@ public class Game {
 	 * @param infinityMode
 	 *            indique si le jeu est en mode infi si true
 	 */
-	public Game(IFroggerGraphics graphic, int width, int height, int minSpeedInTimerLoop, double defaultDensity, boolean infinityMode) {
+	public Game(IFroggerGraphics graphic, int width, int height, int minSpeedInTimerLoop, double defaultDensity, boolean infinityMode, boolean timerMode, int gameTime) {
 		super();
 		this.graphic = graphic;
 		this.width = width;
@@ -59,6 +61,8 @@ public class Game {
 		this.minSpeedInTimerLoops = minSpeedInTimerLoop;
 		this.defaultDensity = defaultDensity;
 		this.infinityMode = infinityMode;
+		this.timerMode = timerMode;
+		this.gameTime = gameTime;
 		this.score = 0;
 		this.maxScore = 0;
 		this.bestScore = getBestScore();
@@ -131,7 +135,7 @@ public class Game {
 
 		//Si le fichier est vide ou s'il n'existe pas on en crée un
 		if (linesList.size() == 0) {
-			System.out.println("Reser tab");
+			System.out.println("Reset tab");
 			ArrayList<String> emptyLines = new ArrayList<>();
 			emptyLines.add("0");
 			emptyLines.add("0");
@@ -144,8 +148,11 @@ public class Game {
 		if (!infinityMode) {
 			result = ManageFile.getLineFile("BestScore.txt", 0);
 		}
-		else {
+		else if (!timerMode){
 			result = ManageFile.getLineFile("BestScore.txt", 1);
+		}
+		else {
+			result = ManageFile.getLineFile("BestScore.txt", 3);
 		}
 		return Integer.parseInt(result);
 	}
@@ -155,14 +162,34 @@ public class Game {
 	 */
 	public void updateBestScore() {
 		//Si le meilleur score est battu
-		if (this.maxScore > this.bestScore) {
+		/*if (this.maxScore > this.bestScore) {
 			//this.bestScore = this.maxScore;
 
+			//Si mode infinity sans timeMode
+			if (infinityMode && !timerMode){
+				ManageFile.rewriteFile("BestScore.txt", 1, String.valueOf(maxScore));
+			} //Si mode infinity avec timerMode
+			else if (infinityMode && timerMode){
+				ManageFile.rewriteFile("BestScore.txt", 3, String.valueOf(maxScore));
+			}
+		} //Le score pour le mode classique est le temps (il faut qu'il soit plus bas que le précédent
+		else if (this.maxScore < this.bestScore && this.bestScore != 0) {
+			//Si mode classique
 			if (!infinityMode) {
-				ManageFile.rewriteFile("BestScore.txt", 0, String.valueOf(/*bestScore*/ maxScore));
+				ManageFile.rewriteFile("BestScore.txt", 0, String.valueOf(maxScore));
+			}
+		}*/
+
+		//-------------------
+		if (!infinityMode &&(this.maxScore < this.bestScore || (bestScore == 0 && this.maxScore > 0))) {
+			ManageFile.rewriteFile("BestScore.txt", 0, String.valueOf(maxScore));
+		}
+		else if (infinityMode && this.maxScore > this.bestScore) {
+			if (!timerMode) {
+				ManageFile.rewriteFile("BestScore.txt", 1, String.valueOf(maxScore));
 			}
 			else {
-				ManageFile.rewriteFile("BestScore.txt", 1, String.valueOf(/*bestScore*/ maxScore));
+				ManageFile.rewriteFile("BestScore.txt", 3, String.valueOf(maxScore));
 			}
 		}
 	}
@@ -205,7 +232,12 @@ public class Game {
 			//System.out.println("Perdu !");
 			if (infinityMode) {
 				updateBestScore();
-				graphic.endGameScreen("Perdu ! \n Score :" + maxScore + "\n Temps: " + timer + "s");
+				if (maxScore > bestScore) {
+					graphic.endGameScreen("New BEST SCORE ! :" + maxScore + "\n Temps: " + timer + "s");
+				}
+				else {
+					graphic.endGameScreen("Score :" + maxScore + "\n Temps: " + timer + "s");
+				}
 			}
 			else {
 				graphic.endGameScreen("Perdu ! \n Temps: " + timer + "s");
@@ -223,13 +255,36 @@ public class Game {
 	 * @return true si la partie est gagnée
 	 */
 	public boolean testWin() {
+		//Ne fonctionne qu'en mode classique (puisque il n'y a pas de winning postion accessible en mode infinity)
 		if (environment.isWinningPosition(frog.getPosition() /*new Case(frog.getPosition().absc, frog.getPosition().ord)*/)) {
 			//System.out.println("GG !");
+			maxScore = timer;
 			updateBestScore();
-			graphic.endGameScreen("GG ! \n Temps: " + timer + "s");
+			if (maxScore < bestScore) {
+				graphic.endGameScreen("New BEST SCORE ! \n Temps: " + timer + "s");
+			}
+			else {
+				graphic.endGameScreen("GG ! \n Temps: " + timer + "s");
+			}
 			gameEnd = true;
 			return true;
 		}
+
+		if (infinityMode && timerMode) {
+			if (timer >= gameTime) {
+				updateBestScore();
+				if (maxScore > bestScore) {
+					graphic.endGameScreen("New BEST SCORE ! :" + maxScore + "\n Temps: " + timer + "s");
+				}
+				else {
+					graphic.endGameScreen("GG ! \n Score :" + maxScore + "\n Temps: " + timer + "s");
+				}
+
+				gameEnd = true;
+				return true;
+			}
+		}
+
 		return false;
 	}
 
@@ -252,6 +307,10 @@ public class Game {
 
 		graphic.clear();
 		graphic.getScore(maxScore, bestScore);
+		if (timerMode || !infinityMode) {
+			graphic.getTimer(timer, gameTime);
+		}
+		//graphic.timeScreen();
 		//graphic.test();
 		//graphic.scoreScreen(maxScore, bestScore);
 		//graphic.testLable();
@@ -265,7 +324,6 @@ public class Game {
 		else {
 			this.graphic.add(new Element(frog.getPosition(), Color.GREEN, frog.getSprite()));
 		}
-
 
 		testLose();
 		testWin();
