@@ -5,6 +5,7 @@ import javax.swing.*;
 
 import environment.LaneInf;
 import gameCommons.IFrog;
+import gameCommons.Main;
 import util.Direction;
 
 import java.awt.*;
@@ -29,6 +30,7 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	private int height;
 	private IFrog frog;
 	private JFrame frame;
+	private boolean menu;
 	private boolean infinity;
 	private boolean timerMode;
 	private int classiqueScore;
@@ -41,6 +43,8 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	BufferedImage colorLane = null;
 	BufferedImage colorRoad = null;
 
+	JTextField field = new JTextField();
+	JTextField timeField = new JTextField();
 
 	/*private BufferedImage frogSprit = null;
 	private BufferedImage rightCar = null;
@@ -50,10 +54,11 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	private BufferedImage rightCar3 = null;
 	private BufferedImage leftCar3 = null;*/
 
-	public FroggerGraphic(int width, int height, boolean infinity, boolean timerMode) {
+	public FroggerGraphic(int width, int height, boolean menu, boolean infinity, boolean timerMode) {
 		this.width = width;
 		this.height = height;
 		elementsToDisplay = new ArrayList<Element>();
+		this.menu = menu;
 		this.infinity = infinity;
 		this.timerMode = timerMode;
 
@@ -99,7 +104,6 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		//Random randomGen = new Random();
-		this.scoreScreen();
 
 		Graphics2D g2d2 = (Graphics2D) g;
 		/*g2d2.drawImage(colorLane, 0/, 26*pixelByCase,26*pixelByCase,pixelByCase,null);
@@ -109,73 +113,50 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		/*for (LaneInf l : roadsToDisplay) {
 			g2d2.drawImage(l.getSprite(), 0, l.getOrd()*pixelByCase,26*pixelByCase,pixelByCase,null);
 		}*/
-		if (this.infinity) {
-			//Affiche uniquement des routes (pour le mode infinity)
-			for (int i = 0; i < height; i++) {
-				g2d2.drawImage(colorRoad, 0, i*pixelByCase,26*pixelByCase,pixelByCase,null);
+		if (!menu) {
+
+
+			if (this.infinity) {
+				//Affiche uniquement des routes (pour le mode infinity)
+				for (int i = 0; i < height; i++) {
+					g2d2.drawImage(colorRoad, 0, i*pixelByCase,26*pixelByCase,pixelByCase,null);
+				}
 			}
+			else {
+				g2d2.drawImage(colorLane, 0, 0*pixelByCase,26*pixelByCase,pixelByCase,null);
+				for (int i = 1; i < height-1; i++) {
+					g2d2.drawImage(colorRoad, 0, i*pixelByCase,26*pixelByCase,pixelByCase,null);
+				}
+				//g2d2.drawImage(colorLane, 0, 19*pixelByCase,26*pixelByCase,pixelByCase,null);
+				g2d2.drawImage(colorLane, 0, (height-1)*pixelByCase,26*pixelByCase,pixelByCase,null);
+			}
+
+			for (Element e : elementsToDisplay) {
+				Graphics2D g2d = (Graphics2D) g;
+				g2d.drawImage(e.sprit, pixelByCase * e.absc,pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase, null);
+			}
+			/*JLabel l = new JLabel("DU TEXTE");
+			//l.setLocation(0,0);
+			l.setFont(new Font("Verdana", 1, 20));
+			l.setForeground(Color.GREEN);
+			//l.setSize(this.getSize());
+			l.setLocation(0,0);
+			//frame.add(l);*/
+
+			this.scoreScreen();
+			//frame.remove(field);*/
+
+
+			/*field.setBounds(0,0,240,32);
+			//field.setLocation(0,0);
+			field.setEditable(false);
+			field.setFocusable(false);
+			field.setFont(new Font("Verdana", 1, 13));
+			field.setText("ALED");
+			frame.add(field);
+			field.repaint();*/
 		}
 		else {
-			g2d2.drawImage(colorLane, 0, 0*pixelByCase,26*pixelByCase,pixelByCase,null);
-			for (int i = 1; i < height-1; i++) {
-				g2d2.drawImage(colorRoad, 0, i*pixelByCase,26*pixelByCase,pixelByCase,null);
-			}
-			//g2d2.drawImage(colorLane, 0, 19*pixelByCase,26*pixelByCase,pixelByCase,null);
-			g2d2.drawImage(colorLane, 0, (height-1)*pixelByCase,26*pixelByCase,pixelByCase,null);
-		}
-
-
-
-		for (Element e : elementsToDisplay) {
-
-			//ImageIcon spriteFrog = new ImageIcon("frog.png");
-			/*BufferedImage frofro = ImageIO.read(new File("frog.png"));
-			g.drawImage(frofro, e.absc, e.ord);*/
-
-			Graphics2D g2d = (Graphics2D) g;
-			//g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-
-			//g2d.drawImage(image, 0,0, pixelByCase, pixelByCase, null);
-
-
-
-			//g.setColor(e.color);
-			//g.fillRect(pixelByCase * e.absc, pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase - 1);
-
-			/*if (e.color == Color.green) {
-				g2d.drawImage(frogSprit, pixelByCase * e.absc,pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase, null);
-			}
-			else if (e.color == Color.black) { //Voiture venant de la gauche
-				int ran = randomGen.nextInt(2);
-				/*if (ran == 0) {
-					g2d.drawImage(leftCar, pixelByCase * e.absc,pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase, null);
-				}
-				else if (ran == 1) {
-					g2d.drawImage(leftCar2, pixelByCase * e.absc,pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase, null);
-				}
-				else if (ran == 2) {
-					g2d.drawImage(leftCar3, pixelByCase * e.absc,pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase, null);
-				}*/
-			/*	g2d.drawImage(leftCar, pixelByCase * e.absc,pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase, null);
-
-			}
-			else if (e.color == Color.blue) { //Voiture venant de la droite
-				int ran = randomGen.nextInt(2);
-				/*if (ran == 0) {
-					g2d.drawImage(rightCar, pixelByCase * e.absc,pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase, null);
-				}
-				else if (ran == 1) {
-					g2d.drawImage(rightCar2, pixelByCase * e.absc,pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase, null);
-				}
-				else if (ran == 2) {
-					g2d.drawImage(rightCar3, pixelByCase * e.absc,pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase, null);
-				}*/
-				/*g2d.drawImage(rightCar, pixelByCase * e.absc,pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase, null);
-			}*/
-
-			g2d.drawImage(e.sprit, pixelByCase * e.absc,pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase, null);
-			//g2d.drawImage(colorLane, 13, 0,26,pixelByCase,null);
 
 		}
 
@@ -280,13 +261,79 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		else {
 			this.classiqueScore = timer;
 		}
+	}
 
+	public void menuScreen() {
+		frame.remove(this);
+
+		//Affichage logo frogger
+		ImageIcon icon = new ImageIcon("frogger.png");
+		Image image = icon.getImage();
+		//Image newimg = image.getScaledInstance(120,120, Image.SCALE_SMOOTH);
+		Image newimg = image.getScaledInstance(icon.getIconWidth()/3,icon.getIconHeight()/3, Image.SCALE_SMOOTH);
+		ImageIcon i = new ImageIcon(newimg);
+
+		JLabel label = new JLabel();
+		label.setIcon(i);
+		label.setFont(new Font("Verdana", 1, 20));
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setVerticalAlignment(SwingConstants.TOP);
+		label.setSize(this.getSize());
+		frame.getContentPane().add(label);
+
+		ImageIcon icon2 = new ImageIcon("frog.png");
+		Image image2 = icon2.getImage();
+		Image newimg2 = image2.getScaledInstance(icon.getIconWidth()/20,icon.getIconHeight()/10, Image.SCALE_SMOOTH);
+		ImageIcon i2 = new ImageIcon(newimg2);
+
+		JLabel label2 = new JLabel();
+		label2.setIcon(i2);
+		label2.setFont(new Font("Verdana", 1, 20));
+		label2.setHorizontalAlignment(SwingConstants.CENTER);
+		label2.setVerticalAlignment(SwingConstants.BOTTOM);
+		label2.setSize(this.getSize());
+		frame.getContentPane().add(label2);
+
+
+
+		JButton button = new JButton("Play classique mode");
+		//button.setBounds(150,50,150,40);
+		button.setBounds((width*pixelByCase)/3,(height*pixelByCase)/2,180,40);
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Main.play();
+			}
+		});
+		frame.add(button);
+		JButton button2 = new JButton("Play infinity mode");
+		//button.setBounds(150,50,150,40);
+		button2.setBounds((width*pixelByCase)/3,(height*pixelByCase)/2+44,180,40);
+		button2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Main.play();
+			}
+		});
+		frame.add(button2);
+		JButton button3 = new JButton("Play infinity timer mode");
+		//button.setBounds(150,50,150,40);
+		button3.setBounds((width*pixelByCase)/3,(height*pixelByCase)/2+88,180,40);
+		button3.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Main.play();
+			}
+		});
+		frame.add(button3);
+		frame.repaint();
 
 	}
 
 	public void scoreScreen() {
 		/*JButton button = new JButton("Test");
 		button.setBounds(150,50,150,40);
+		button.setFocusable(false);
 		frame.add(button);
 		button.repaint();
 
@@ -295,32 +342,35 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		lab.setForeground(Color.GREEN);
 		lab.setHorizontalAlignment(SwingConstants.CENTER);
 		frame.add(lab);
+		//frame.getContentPane().add(lab);
 		lab.repaint();*/
-		JTextField field = new JTextField();
+
+		//field = new JTextField();
 		field.setBounds(0,0,240,32);
+		field.setEditable(false);
+		field.setFocusable(false);
 		field.setFont(new Font("Verdana", 1, 13));
 		//field.setText("ALED");
 		if (infinity) {
 			field.setText("Score : " + this.score + "\t Best Score : " + this.bestScore);
 		}
 		else {
-			field.setText("Score : " + this.classiqueScore + "\t Best Score : " + this.bestScore);
+			field.setText("Score : " + this.classiqueScore + "s" + "\t Best Score : " + this.bestScore+ "s");
 		}
 
 
 		field.setForeground(Color.GREEN);
 		field.setBackground(Color.GRAY);
 		field.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-		//field.setOpaque(false);
 		frame.getContentPane().add(field);
 		field.repaint();
 
-
 		if (timerMode) {
-			JTextField timeField = new JTextField();
 			timeField.setBounds(20*pixelByCase,0,100,32);
 			timeField.setFont(new Font("Verdana", 1, 13));
 			timeField.setText("Time left :" + this.timeLeft);
+			timeField.setEditable(false);
+			timeField.setFocusable(false);
 
 			timeField.setForeground(Color.GREEN);
 			timeField.setBackground(Color.GRAY);
@@ -328,6 +378,7 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 			frame.getContentPane().add(timeField);
 			timeField.repaint();
 		}
+		//frame.remove(field);
 	}
 
 	/*public void timeScreen() {
@@ -381,7 +432,7 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	}*/
 
 	public void endGameScreen(String s) {
-		frame.remove(this);
+		/*frame.remove(this);
 		JLabel label = new JLabel(s);
 		label.setFont(new Font("Verdana", 1, 20));
 		label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -410,7 +461,7 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 				} catch (IOException ioException) {
 					ioException.printStackTrace();
 				}*/
-				System.exit (0);
+			/*	System.exit (0);
 			}
 		});
 		button2.addActionListener(new ActionListener() {
@@ -430,6 +481,32 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		frame.add(button);
 		frame.add(button2);
 		frame.getContentPane().add(label);
+		frame.repaint();*/
+		//frame.removeAll();
+
+		frame.remove(field);
+		frame.remove(timeField);
+		frame.remove(this);
+		frame.repaint();
+
+		//frame.remove(10);
+
+		JLabel label = new JLabel(s);
+		label.setFont(new Font("Verdana", 1, 20));
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setSize(this.getSize());
+
+		JButton button = new JButton("MENU");
+		button.setBounds(/*100*/width*5,/*100*/height*5,150,40);
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+			}
+		});
+
+		frame.getContentPane().add(label);
+		frame.add(button);
 		frame.repaint();
 
 	}

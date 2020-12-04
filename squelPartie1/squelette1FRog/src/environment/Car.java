@@ -39,6 +39,10 @@ public class Car {
 
 	//TODO : ajout de methodes
 
+	/**
+	 * Renvoie un sprite de voiture de couleur aléatoire
+	 * @return Une image (sprite) pour la voiture
+	 */
 	public BufferedImage spriteGenerator() {
 		BufferedImage spriteGen = null;
 		int random = game.randomGen.nextInt(3);
@@ -113,8 +117,10 @@ public class Car {
 	public boolean inLimits() {
 		return this.leftPosition.absc + this.length > 0 || this.leftPosition.absc < this.game.width;
 	}
-	
-	/* Fourni : addToGraphics() permettant d'ajouter un element graphique correspondant a la voiture*/
+
+	/**
+	 * Fourni : addToGraphics() permettant d'ajouter un element graphique correspondant a la voiture
+	 */
 	private void addToGraphics() {
 		for (int i = 0; i < length; i++) {
 			Color color = colorRtL;

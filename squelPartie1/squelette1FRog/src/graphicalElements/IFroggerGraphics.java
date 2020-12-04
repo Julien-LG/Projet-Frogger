@@ -46,11 +46,14 @@ public interface IFroggerGraphics {
     public void getTimer(int timer, int gameTime);
 
     /**
+     * Lance un écran de sélection du mode de jeu
+     */
+    public void menuScreen();
+
+    /**
      * Affiche l'état actuel des scores de la partie
      */
     public void scoreScreen();
-
-
 
     //public  void testLable();
 

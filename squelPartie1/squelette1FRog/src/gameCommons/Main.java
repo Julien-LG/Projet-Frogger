@@ -16,15 +16,16 @@ import graphicalElements.IFroggerGraphics;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void play() {
 		boolean infinityMode = true;
-		boolean timerMode = false;
+		boolean timerMode = true;
 		//Temps en secondes de la durée d'une partie (utilisé seulement si timerMode == true)
 		int gameTime = 60;
-		if (args.length != 0) {
+
+		/*if (args.length != 0) {
 			System.out.println(args[0]);
 			infinityMode = true;
-		}
+		}*/
 
 		//Il n'y a pas de timerMode en dans le mode classique
 		if (!infinityMode) {
@@ -42,9 +43,9 @@ public class Main {
 		int minSpeedInTimerLoops = 10;
 		double defaultDensity = 0.2;
 
-		
+
 		//Création de l'interface graphique
-		IFroggerGraphics graphic = new FroggerGraphic(width, height, infinityMode, timerMode);
+		IFroggerGraphics graphic = new FroggerGraphic(width, height, false, infinityMode, timerMode);
 		//Création de la partie
 		Game game = new Game(graphic, width, height, minSpeedInTimerLoops, defaultDensity, infinityMode, timerMode, gameTime);
 		//Création et liason de la grenouille
@@ -75,7 +76,7 @@ public class Main {
 		}*/
 		//Timer gameTime = new Timer(1000);
 
-		//Boucle principale : l'environnement s'acturalise tous les tempo milisecondes
+		//Boucle principale : l'environnement s'actualise tous les tempo milisecondes
 		Timer timer = new Timer(tempo, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -86,6 +87,10 @@ public class Main {
 		});
 		timer.setInitialDelay(0);
 		timer.start();
-		//System.out.println(timer);
+	}
+
+	public static void main(String[] args) {
+		IFroggerGraphics graphic = new FroggerGraphic(15, 15,true, false,false);
+		graphic.menuScreen();
 	}
 }
