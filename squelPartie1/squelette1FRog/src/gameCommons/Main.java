@@ -16,9 +16,10 @@ import graphicalElements.IFroggerGraphics;
 
 public class Main {
 
-	public static void play() {
-		boolean infinityMode = true;
-		boolean timerMode = true;
+	public static void play(boolean infinityMode, boolean timerMode) {
+		/*boolean infinityMode = true;
+		boolean timerMode = true;*/
+
 		//Temps en secondes de la durée d'une partie (utilisé seulement si timerMode == true)
 		int gameTime = 60;
 

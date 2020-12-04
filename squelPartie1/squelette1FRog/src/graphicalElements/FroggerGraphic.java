@@ -302,7 +302,8 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Main.play();
+				//Mode classique
+				Main.play(false,false);
 			}
 		});
 		frame.add(button);
@@ -312,7 +313,8 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		button2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Main.play();
+				//Mode Infinity
+				Main.play(true,false);
 			}
 		});
 		frame.add(button2);
@@ -322,10 +324,30 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		button3.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Main.play();
+				//Mode Infinity Timer
+				Main.play(true,true);
 			}
 		});
 		frame.add(button3);
+
+		JButton button4 = new JButton("");
+		ImageIcon eng = new ImageIcon("engrenage.png");
+
+		Image engr = eng.getImage();
+		Image newengr = engr.getScaledInstance(eng.getIconWidth()/10,eng.getIconHeight()/10, Image.SCALE_SMOOTH);
+		ImageIcon eng2 = new ImageIcon(newengr);
+
+
+		button4.setIcon(eng2);
+		button4.setBounds((width*pixelByCase)-40,(height*pixelByCase)-40,40,40);
+		button4.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Options");
+			}
+		});
+		frame.add(button4);
+
 		frame.repaint();
 
 	}
@@ -497,7 +519,7 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		label.setSize(this.getSize());
 
 		JButton button = new JButton("MENU");
-		button.setBounds(/*100*/width*5,/*100*/height*5,150,40);
+		button.setBounds(/*100*/(width*pixelByCase)/2-75,/*100*/(height*pixelByCase)/2+20,150,40);
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
