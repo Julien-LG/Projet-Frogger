@@ -241,11 +241,10 @@ public class Game {
 	 * partie.
 	 */
 	public void update() {
-
 		graphic.clear();
 		//Envoie le score dans FroggerGraphic pour permettre l'affichage en temps réel
 		graphic.getScore(maxScore, bestScore);
-		//Envoie le timer dans FroggerGraphic pour permettre l'affichage en temps réel pour le mode contre la montre
+		//Envoie le timer dans FroggerGraphic pour permettre l'affichage en temps réel pour le mode contre la montre ou pour compter comme score pour le mode classique
 		if (timerMode || !infinityMode) {
 			graphic.getTimer(timer, gameTime);
 		}

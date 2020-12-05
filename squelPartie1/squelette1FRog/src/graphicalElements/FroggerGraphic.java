@@ -57,12 +57,11 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 
 		JFrame frame = new JFrame("Frogger");
 		this.frame = frame;
+		//Récupération de l'information du mode grahique a utilisé
 		if (ManageFile.getLineFile("Options.txt", 0).equals("true")) {
-			System.out.println("True");
 			this.minimalistMode = true;
 		}
 		else {
-			System.out.println("False");
 			this.minimalistMode = false;
 		}
 		System.out.println(minimalistMode);
