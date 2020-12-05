@@ -3,7 +3,6 @@ package graphicalElements;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import environment.LaneInf;
 import gameCommons.IFrog;
 import gameCommons.Main;
 import tools.ManageFile;
@@ -15,13 +14,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListener {
 	private ArrayList<Element> elementsToDisplay;
@@ -36,10 +31,13 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 	private boolean timerMode;
 	private int classiqueScore;
 	private int timeLeft = 60;
-	//private JLabel labelScore;
 
+	private String bestScoreFileName = "BestScore.txt";
 	private int score = 0;
 	private int bestScore = 0;
+
+	private String optionsFileName = "Options.txt";
+	private boolean minimalistMode;
 
 	BufferedImage colorLane = null;
 	BufferedImage colorRoad = null;
@@ -68,6 +66,15 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 
 		JFrame frame = new JFrame("Frogger");
 		this.frame = frame;
+		if (ManageFile.getLineFile("Options.txt", 0).equals("true")) {
+			System.out.println("True");
+			this.minimalistMode = true;
+		}
+		else {
+			System.out.println("False");
+			this.minimalistMode = false;
+		}
+		System.out.println(minimalistMode);
 		//this.labelScore = new JLabel("");
 
 
@@ -81,25 +88,12 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		frame.setVisible(true);
 		frame.addKeyListener(this);
 
-
 		try {
 			colorLane = ImageIO.read(new File("colorLane.png"));
 			colorRoad = ImageIO.read(new File("colorRoad.png"));
 		} catch (IOException ioException) {
 			ioException.printStackTrace();
 		}
-
-		/*try {
-			frogSprit = ImageIO.read(new File("frog.png"));
-			rightCar = ImageIO.read(new File("rightCar.png"));
-			leftCar = ImageIO.read(new File("leftCar.png"));
-			rightCar2 = ImageIO.read(new File("rightCar2.png"));
-			leftCar2 = ImageIO.read(new File("leftCar2.png"));
-			rightCar3 = ImageIO.read(new File("rightCar3.png"));
-			leftCar3 = ImageIO.read(new File("leftCar3.png"));
-		} catch (IOException ioException) {
-			System.out.println(ioException);
-		}*/
 	}
 
 	public void paintComponent(Graphics g) {
@@ -115,29 +109,31 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 			g2d2.drawImage(l.getSprite(), 0, l.getOrd()*pixelByCase,26*pixelByCase,pixelByCase,null);
 		}*/
 		if (!menu) {
-			if (this.infinity) {
-				//Affiche uniquement des routes (pour le mode infinity)
-				for (int i = 0; i < height; i++) {
-					g2d2.drawImage(colorRoad, 0, i*pixelByCase,26*pixelByCase,pixelByCase,null);
+			if (!minimalistMode) {
+				if (this.infinity) {
+					//Affiche uniquement des routes (pour le mode infinity)
+					for (int i = 0; i < height; i++) {
+						g2d2.drawImage(colorRoad, 0, i*pixelByCase,26*pixelByCase,pixelByCase,null);
+					}
 				}
-			}
-			else {
-				g2d2.drawImage(colorLane, 0, 0*pixelByCase,26*pixelByCase,pixelByCase,null);
-				for (int i = 1; i < height-1; i++) {
-					g2d2.drawImage(colorRoad, 0, i*pixelByCase,26*pixelByCase,pixelByCase,null);
+				else {
+					g2d2.drawImage(colorLane, 0, 0,26*pixelByCase,pixelByCase,null);
+					for (int i = 1; i < height-1; i++) {
+						g2d2.drawImage(colorRoad, 0, i*pixelByCase,26*pixelByCase,pixelByCase,null);
+					}
+					g2d2.drawImage(colorLane, 0, (height-1)*pixelByCase,26*pixelByCase,pixelByCase,null);
 				}
-				//g2d2.drawImage(colorLane, 0, 19*pixelByCase,26*pixelByCase,pixelByCase,null);
-				g2d2.drawImage(colorLane, 0, (height-1)*pixelByCase,26*pixelByCase,pixelByCase,null);
 			}
 
 			for (Element e : elementsToDisplay) {
-				Graphics2D g2d = (Graphics2D) g;
-				g2d.drawImage(e.sprit, pixelByCase * e.absc,pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase, null);
-
-				/*
-				g.setColor(e.color);
-				g.fillRect(pixelByCase * e.absc, pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase - 1);
-				* */
+				if (minimalistMode) {
+					g.setColor(e.color);
+					g.fillRect(pixelByCase * e.absc, pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase - 1);
+				}
+				else {
+					Graphics2D g2d = (Graphics2D) g;
+					g2d.drawImage(e.sprit, pixelByCase * e.absc,pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase, null);
+				}
 			}
 			this.scoreScreen();
 		}
@@ -252,105 +248,117 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		frame.remove(this);
 
 		//Affichage logo frogger
-		ImageIcon icon = new ImageIcon("frogger.png");
-		Image image = icon.getImage();
-		//Image newimg = image.getScaledInstance(120,120, Image.SCALE_SMOOTH);
-		Image newimg = image.getScaledInstance(icon.getIconWidth()/3,icon.getIconHeight()/3, Image.SCALE_SMOOTH);
-		ImageIcon i = new ImageIcon(newimg);
+		ImageIcon iconFrogger = new ImageIcon("frogger.png");
+		JLabel labelIconFrogger = new JLabel();
+		labelIconFrogger.setIcon(new ImageIcon(iconFrogger.getImage().getScaledInstance(iconFrogger.getIconWidth()/3,iconFrogger.getIconHeight()/3, Image.SCALE_SMOOTH)));
+		labelIconFrogger.setFont(new Font("Verdana", Font.BOLD, 20));
+		labelIconFrogger.setHorizontalAlignment(SwingConstants.CENTER);
+		labelIconFrogger.setVerticalAlignment(SwingConstants.TOP);
+		labelIconFrogger.setSize(this.getSize());
+		frame.getContentPane().add(labelIconFrogger);
 
-		JLabel label = new JLabel();
-		label.setIcon(i);
-		label.setFont(new Font("Verdana", 1, 20));
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setVerticalAlignment(SwingConstants.TOP);
-		label.setSize(this.getSize());
-		frame.getContentPane().add(label);
+		//Affichage logo frog
+		ImageIcon iconFrog = new ImageIcon("frog.png");
+		JLabel labelIconFrog = new JLabel();
+		labelIconFrog.setIcon(new ImageIcon(iconFrog.getImage().getScaledInstance(iconFrogger.getIconWidth()/20,iconFrogger.getIconHeight()/10, Image.SCALE_SMOOTH)));
+		labelIconFrog.setFont(new Font("Verdana", Font.BOLD, 20));
+		labelIconFrog.setHorizontalAlignment(SwingConstants.CENTER);
+		labelIconFrog.setVerticalAlignment(SwingConstants.BOTTOM);
+		labelIconFrog.setSize(this.getSize());
+		frame.getContentPane().add(labelIconFrog);
 
-		ImageIcon icon2 = new ImageIcon("frog.png");
-		Image image2 = icon2.getImage();
-		Image newimg2 = image2.getScaledInstance(icon.getIconWidth()/20,icon.getIconHeight()/10, Image.SCALE_SMOOTH);
-		ImageIcon i2 = new ImageIcon(newimg2);
-
-		JLabel label2 = new JLabel();
-		label2.setIcon(i2);
-		label2.setFont(new Font("Verdana", 1, 20));
-		label2.setHorizontalAlignment(SwingConstants.CENTER);
-		label2.setVerticalAlignment(SwingConstants.BOTTOM);
-		label2.setSize(this.getSize());
-		frame.getContentPane().add(label2);
-
-
-
-		JButton button = new JButton("Play classique mode");
-		//button.setBounds(150,50,150,40);
-		button.setBounds((width*pixelByCase)/3,(height*pixelByCase)/2,180,40);
-		button.addActionListener(new ActionListener() {
+		//Bouton pour jouer en Mode Classique
+		JButton buttonClassic = new JButton("Play classic mode");
+		buttonClassic.setBounds((width*pixelByCase)/3,(height*pixelByCase)/2,180,40);
+		buttonClassic.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Mode classique
 				Main.play(false,false);
 			}
 		});
-		frame.add(button);
-		JButton button2 = new JButton("Play infinity mode");
-		//button.setBounds(150,50,150,40);
-		button2.setBounds((width*pixelByCase)/3,(height*pixelByCase)/2+44,180,40);
-		button2.addActionListener(new ActionListener() {
+		frame.add(buttonClassic);
+
+		//Bouton pour jouer en Mode Infinity
+		JButton buttonInfinity = new JButton("Play infinity mode");
+		buttonInfinity.setBounds((width*pixelByCase)/3,(height*pixelByCase)/2+44,180,40);
+		buttonInfinity.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Mode Infinity
 				Main.play(true,false);
 			}
 		});
-		frame.add(button2);
-		JButton button3 = new JButton("Play infinity timer mode");
-		//button.setBounds(150,50,150,40);
-		button3.setBounds((width*pixelByCase)/3,(height*pixelByCase)/2+88,180,40);
-		button3.addActionListener(new ActionListener() {
+		frame.add(buttonInfinity);
+
+		//Bouton pour jouer en Mode Infinity Timer
+		JButton buttonInfinityTimer = new JButton("Play infinity timer mode");
+		buttonInfinityTimer.setBounds((width*pixelByCase)/3,(height*pixelByCase)/2+88,180,40);
+		buttonInfinityTimer.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Mode Infinity Timer
 				Main.play(true,true);
 			}
 		});
-		frame.add(button3);
+		frame.add(buttonInfinityTimer);
 
-		JButton button4 = new JButton("");
-		ImageIcon eng = new ImageIcon("engrenage.png");
-
-		Image engr = eng.getImage();
-		Image newengr = engr.getScaledInstance(eng.getIconWidth()/10,eng.getIconHeight()/10, Image.SCALE_SMOOTH);
-		ImageIcon eng2 = new ImageIcon(newengr);
-
-
-		button4.setIcon(eng2);
-		button4.setBounds((width*pixelByCase)-40,(height*pixelByCase)-40,40,40);
-		button4.addActionListener(new ActionListener() {
+		//Bouton pour lancer les options
+		JButton buttonOptions = new JButton("");
+		ImageIcon gear = new ImageIcon("engrenage.png");
+		buttonOptions.setIcon(new ImageIcon(gear.getImage().getScaledInstance(gear.getIconWidth()/10,gear.getIconHeight()/10, Image.SCALE_SMOOTH)));
+		buttonOptions.setBounds((width*pixelByCase)-40,(height*pixelByCase)-40,40,40);
+		buttonOptions.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//System.out.println("Options");
 				optionsScreen();
 			}
 		});
-		frame.add(button4);
+		frame.add(buttonOptions);
+
+		/*JLabel labelScore1 = new JLabel("Classique : 0");
+		labelScore1.setLocation(10,10);
+		labelScore1.setForeground(Color.GREEN);
+		labelScore1.setFont(new Font("Verdana", 1, 13));
+		JLabel labelScore2 = new JLabel("Infinity : 0");
+		JLabel labelScore3 = new JLabel("Infinity Timer : 0");*/
+		/*JTextField t = new JTextField("yo");
+		t.setBounds(0,0,150,40);*/
+
 
 		frame.repaint();
 	}
 
 	public void optionsScreen() {
-		//System.out.println("yo la miff");
-		//setBackground(Color.BLUE);
 		setPreferredSize(new Dimension(width * pixelByCase, height * pixelByCase));
+		setBackground(UIManager.getColor ( "Panel.background" ));
+		//Color.OPAQUE
 		JFrame frame2 = new JFrame("Options");
 		frame2.getContentPane().add(this);
 		frame2.pack();
 		frame2.setVisible(true);
 		frame2.addKeyListener(this);
-		//frame2.setLayout(new FlowLayout(FlowLayout.CENTER));
 		frame2.setLayout(new GridBagLayout());
-		//frame2.setLayout(new BoxLayout());
-		//frame2.setLayout(new BorderLayout());
-		//frame2.setLayout(new CardLayout());
+
+
+		/*//Affichage logo frogger
+		ImageIcon icon = new ImageIcon("engrenage.png");
+		Image image = icon.getImage();
+		//Image newimg = image.getScaledInstance(120,120, Image.SCALE_SMOOTH);
+		Image newimg = image.getScaledInstance(100,100, Image.SCALE_SMOOTH);
+		ImageIcon i = new ImageIcon(newimg);
+
+		JLabel label = new JLabel();
+		label.setIcon(i);
+		label.setFont(new Font("Verdana", Font.BOLD, 20));
+		/*label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setVerticalAlignment(SwingConstants.TOP);*/
+		/*label.setHorizontalAlignment(0);
+		label.setVerticalAlignment(0);
+		label.setSize(this.getSize());
+		frame.getContentPane().add(label);*/
+
 
 		JButton button = new JButton("Delete Bests scores");
 		button.setBounds(0,0,150,40);
@@ -369,7 +377,7 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 					emptyLines.add("0");
 					emptyLines.add("0");
 					emptyLines.add("0");
-					ManageFile.createFile("BestScore.txt", emptyLines);
+					ManageFile.createFile(bestScoreFileName, emptyLines);
 				}
 				else {
 					System.out.println("non");
@@ -379,17 +387,22 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		frame2.add(button);
 		button.repaint();
 
-		JButton button2 = new JButton("Minimalist graphics");
+		JButton button2 = new JButton("Switch Minimalist/Normal graphics");
 		button2.setBounds(0,0,150,40);
 		//button.setBounds((width*pixelByCase)/3,(height*pixelByCase)/2,180,40);
 		//button.setBounds(0,0,0,0);
 		button2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//Mode classique
-				System.out.println("Mode minimaliste");
+				if (ManageFile.getLineFile(optionsFileName, 0).equals("true")) {
+					ManageFile.rewriteFile(optionsFileName, 0, "false");
+				}
+				else {
+					ManageFile.rewriteFile(optionsFileName, 0, "true");
+				}
 			}
 		});
+
 		frame2.add(button2);
 		button2.repaint();
 
@@ -445,8 +458,8 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		field.repaint();
 
 		if (timerMode) {
-			timeField.setBounds(20*pixelByCase,0,100,32);
-			timeField.setFont(new Font("Verdana", 1, 13));
+			timeField.setBounds(width*pixelByCase-100,0,100,32);
+			timeField.setFont(new Font("Verdana", Font.BOLD, 13));
 			timeField.setText("Time left :" + this.timeLeft);
 			timeField.setEditable(false);
 			timeField.setFocusable(false);
@@ -571,7 +584,7 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		//frame.remove(10);
 
 		JLabel label = new JLabel(s);
-		label.setFont(new Font("Verdana", 1, 20));
+		label.setFont(new Font("Verdana", Font.BOLD, 20));
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setSize(this.getSize());
 

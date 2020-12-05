@@ -33,6 +33,8 @@ public class Game {
 	public long debutTimer;
 	public boolean gameEnd;
 
+	private String bestScoreFileName = "BestScore.txt";
+
 	// Lien aux objets utilisés
 	private IEnvironment environment;
 	private IFrog frog;
@@ -79,7 +81,7 @@ public class Game {
 
 		try {
 			//File f = new File("src/com/mkyong/data.txt");
-			BufferedReader bRead = new BufferedReader(new FileReader("BestScore.txt"));
+			BufferedReader bRead = new BufferedReader(new FileReader(bestScoreFileName));
 			String readLine = "";
 			System.out.println("Reading file using Buffered Reader");
 
@@ -105,7 +107,7 @@ public class Game {
 		} catch (IOException e) {
 			e.printStackTrace();
 			try {
-				BufferedWriter bWrite = new BufferedWriter(new FileWriter("BestScore.txt"));
+				BufferedWriter bWrite = new BufferedWriter(new FileWriter(bestScoreFileName));
 				bWrite.write("0\n0\n0\n0");
 				bWrite.close();
 			} catch (IOException exep) {
@@ -131,7 +133,7 @@ public class Game {
 		}*/
 		String result = "0";
 		//Récupération des lignes du fichier "BestScore"
-		ArrayList<String> linesList = ManageFile.extractFile("BestScore.txt");
+		ArrayList<String> linesList = ManageFile.extractFile(bestScoreFileName);
 
 		//Si le fichier est vide ou s'il n'existe pas on en crée un
 		if (linesList.size() == 0) {
@@ -141,18 +143,18 @@ public class Game {
 			emptyLines.add("0");
 			emptyLines.add("0");
 			emptyLines.add("0");
-			ManageFile.createFile("BestScore.txt", emptyLines);
-			linesList = ManageFile.extractFile("BestScore.txt");
+			ManageFile.createFile(bestScoreFileName, emptyLines);
+			linesList = ManageFile.extractFile(bestScoreFileName);
 		}
 
 		if (!infinityMode) {
-			result = ManageFile.getLineFile("BestScore.txt", 0);
+			result = ManageFile.getLineFile(bestScoreFileName, 0);
 		}
 		else if (!timerMode){
-			result = ManageFile.getLineFile("BestScore.txt", 1);
+			result = ManageFile.getLineFile(bestScoreFileName, 1);
 		}
 		else {
-			result = ManageFile.getLineFile("BestScore.txt", 3);
+			result = ManageFile.getLineFile(bestScoreFileName, 3);
 		}
 		return Integer.parseInt(result);
 	}
@@ -167,29 +169,29 @@ public class Game {
 
 			//Si mode infinity sans timeMode
 			if (infinityMode && !timerMode){
-				ManageFile.rewriteFile("BestScore.txt", 1, String.valueOf(maxScore));
+				ManageFile.rewriteFile(bestScoreFileName, 1, String.valueOf(maxScore));
 			} //Si mode infinity avec timerMode
 			else if (infinityMode && timerMode){
-				ManageFile.rewriteFile("BestScore.txt", 3, String.valueOf(maxScore));
+				ManageFile.rewriteFile(bestScoreFileName, 3, String.valueOf(maxScore));
 			}
 		} //Le score pour le mode classique est le temps (il faut qu'il soit plus bas que le précédent
 		else if (this.maxScore < this.bestScore && this.bestScore != 0) {
 			//Si mode classique
 			if (!infinityMode) {
-				ManageFile.rewriteFile("BestScore.txt", 0, String.valueOf(maxScore));
+				ManageFile.rewriteFile(bestScoreFileName, 0, String.valueOf(maxScore));
 			}
 		}*/
 
 		//-------------------
 		if (!infinityMode &&(this.maxScore < this.bestScore || (bestScore == 0 && this.maxScore > 0))) {
-			ManageFile.rewriteFile("BestScore.txt", 0, String.valueOf(maxScore));
+			ManageFile.rewriteFile(bestScoreFileName, 0, String.valueOf(maxScore));
 		}
 		else if (infinityMode && this.maxScore > this.bestScore) {
 			if (!timerMode) {
-				ManageFile.rewriteFile("BestScore.txt", 1, String.valueOf(maxScore));
+				ManageFile.rewriteFile(bestScoreFileName, 1, String.valueOf(maxScore));
 			}
 			else {
-				ManageFile.rewriteFile("BestScore.txt", 3, String.valueOf(maxScore));
+				ManageFile.rewriteFile(bestScoreFileName, 3, String.valueOf(maxScore));
 			}
 		}
 	}
