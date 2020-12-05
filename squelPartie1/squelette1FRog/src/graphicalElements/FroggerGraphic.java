@@ -6,6 +6,7 @@ import javax.swing.*;
 import environment.LaneInf;
 import gameCommons.IFrog;
 import gameCommons.Main;
+import tools.ManageFile;
 import util.Direction;
 
 import java.awt.*;
@@ -114,8 +115,6 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 			g2d2.drawImage(l.getSprite(), 0, l.getOrd()*pixelByCase,26*pixelByCase,pixelByCase,null);
 		}*/
 		if (!menu) {
-
-
 			if (this.infinity) {
 				//Affiche uniquement des routes (pour le mode infinity)
 				for (int i = 0; i < height; i++) {
@@ -134,27 +133,13 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 			for (Element e : elementsToDisplay) {
 				Graphics2D g2d = (Graphics2D) g;
 				g2d.drawImage(e.sprit, pixelByCase * e.absc,pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase, null);
+
+				/*
+				g.setColor(e.color);
+				g.fillRect(pixelByCase * e.absc, pixelByCase * (height - 1 - e.ord), pixelByCase, pixelByCase - 1);
+				* */
 			}
-			/*JLabel l = new JLabel("DU TEXTE");
-			//l.setLocation(0,0);
-			l.setFont(new Font("Verdana", 1, 20));
-			l.setForeground(Color.GREEN);
-			//l.setSize(this.getSize());
-			l.setLocation(0,0);
-			//frame.add(l);*/
-
 			this.scoreScreen();
-			//frame.remove(field);*/
-
-
-			/*field.setBounds(0,0,240,32);
-			//field.setLocation(0,0);
-			field.setEditable(false);
-			field.setFocusable(false);
-			field.setFont(new Font("Verdana", 1, 13));
-			field.setText("ALED");
-			frame.add(field);
-			field.repaint();*/
 		}
 		else {
 
@@ -343,13 +328,85 @@ public class FroggerGraphic extends JPanel implements IFroggerGraphics, KeyListe
 		button4.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Options");
+				//System.out.println("Options");
+				optionsScreen();
 			}
 		});
 		frame.add(button4);
 
 		frame.repaint();
+	}
 
+	public void optionsScreen() {
+		//System.out.println("yo la miff");
+		//setBackground(Color.BLUE);
+		setPreferredSize(new Dimension(width * pixelByCase, height * pixelByCase));
+		JFrame frame2 = new JFrame("Options");
+		frame2.getContentPane().add(this);
+		frame2.pack();
+		frame2.setVisible(true);
+		frame2.addKeyListener(this);
+		//frame2.setLayout(new FlowLayout(FlowLayout.CENTER));
+		frame2.setLayout(new GridBagLayout());
+		//frame2.setLayout(new BoxLayout());
+		//frame2.setLayout(new BorderLayout());
+		//frame2.setLayout(new CardLayout());
+
+		JButton button = new JButton("Delete Bests scores");
+		button.setBounds(0,0,150,40);
+		//button.setBounds((width*pixelByCase)/3,(height*pixelByCase)/2,180,40);
+		//button.setBounds(0,0,0,0);
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//Mode classique
+				System.out.println("Suppresion des meilleurs scores");
+				int n = JOptionPane.showConfirmDialog(frame2, "Are you sure you want deleted? (final action)", "Removal bestscores", JOptionPane.YES_NO_OPTION);
+				if (n == 0) {
+					System.out.println("oui");
+					ArrayList<String> emptyLines = new ArrayList<>();
+					emptyLines.add("0");
+					emptyLines.add("0");
+					emptyLines.add("0");
+					emptyLines.add("0");
+					ManageFile.createFile("BestScore.txt", emptyLines);
+				}
+				else {
+					System.out.println("non");
+				}
+			}
+		});
+		frame2.add(button);
+		button.repaint();
+
+		JButton button2 = new JButton("Minimalist graphics");
+		button2.setBounds(0,0,150,40);
+		//button.setBounds((width*pixelByCase)/3,(height*pixelByCase)/2,180,40);
+		//button.setBounds(0,0,0,0);
+		button2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//Mode classique
+				System.out.println("Mode minimaliste");
+			}
+		});
+		frame2.add(button2);
+		button2.repaint();
+
+
+		/*JLabel label = new JLabel("Bionjour");
+		label.setFont(new Font("Verdana", 1, 20));
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setForeground(Color.GREEN);
+		label.setSize(this.getSize());
+		frame2.getContentPane().add(label);*/
+
+		/*JTextField j = new JTextField("Oui");
+		j.setBounds(0,0,150,40);*/
+		/*JButton j = new JButton("Oui");
+		j.setBounds(0,0,150,40);
+		//frame2.getContentPane().add(j);
+		frame2.add(j);*/
 	}
 
 	public void scoreScreen() {
