@@ -1,41 +1,42 @@
 package environment;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import gameCommons.IEnvironment;
 import util.Case;
 import gameCommons.Game;
-//import environment.Environment;
 
 public class Lane {
 	private Game game;
 	private int ord;
 	private int speed;
-	private ArrayList<Car> cars = new ArrayList<>(); //new ArrayList<Car>(); ??? c'est une proposition, le code de base c'est l'autre qui n'est pas en commentaire
+	private ArrayList<Car> cars = new ArrayList<>();
 	private boolean leftToRight;
 	private double density;
-	/*private boolean colorRoad;
-	private BufferedImage sprite = null;*/
 	private int tic = 0; //les tic de l'horloge
 
 	// TODO : Constructeur(s)
 	public Lane(Game game, int ord, double density) {
 		this.game = game;
 		this.ord = ord;
-		this.speed = /*speed;*/ game.randomGen.nextInt(game.minSpeedInTimerLoops); //+1 ?
+		this.speed = game.randomGen.nextInt(game.minSpeedInTimerLoops); //+1 ?
 		this.leftToRight = game.randomGen.nextBoolean();
 		this.density = density;
-		for (int i = 0; i < 4 * game.width; i++) {
+
+		//Permet d'avoir des voitures au milieu de l'écran au début de la partie
+		for (int i = 0; i < 2 * game.width; i++) {
 			this.displaceCars(true);
 			this.mayAddCar();
 		}
 	}
 
+	//Constructeur avec la densité par default
 	public Lane(Game game, int ord) {
 		this(game, ord, game.defaultDensity);
 	}
 
+	/**
+	 * Supprime les voitures en dehors de la fenetre
+	 */
 	private void deleteCars() {
 		ArrayList<Car> deletedCars = new ArrayList<>();
 		for (Car car: this.cars) {
@@ -48,6 +49,10 @@ public class Lane {
 		}
 	}
 
+	/**
+	 * Actualise l'emplacement des voitures et supprime celles qui ne sont plus visibles
+	 * @param b
+	 */
 	private void displaceCars(boolean b) {
 		for (Car car: this.cars) {
 			car.displace(b);
@@ -55,6 +60,9 @@ public class Lane {
 		this.deleteCars();
 	}
 
+	/**
+	 * Mets à jour la Lane en fonction de la vitesse des voitures
+	 */
 	public void update() {
 		// TODO
 		this.tic++;
@@ -87,6 +95,11 @@ public class Lane {
 	 * Fourni : mayAddCar(), getFirstCase() et getBeforeFirstCase() 
 	 */
 
+	/**
+	 * Indique si la case est libre
+	 * @param c une Case
+	 * @return true si la case est libre
+	 */
 	public boolean isSafe(Case c) {
 		for (Car car: this.cars) {
 			if (car.aboveCase(c)) {

@@ -9,13 +9,17 @@ import environment.Environment;
 import environment.EnvInf;
 import frog.Frog;
 import frog.FrogInf;
-import givenEnvironment.GivenEnvironment;
 import graphicalElements.FroggerGraphic;
 import graphicalElements.IFroggerGraphics;
 
 
 public class Main {
 
+	/**
+	 * Lance tout ce qu'il faut pour lancer une partie
+	 * @param infinityMode true si le mode de jeu est Infinity
+	 * @param timerMode true si le mode de jeu est contre la montre
+	 */
 	public static void play(boolean infinityMode, boolean timerMode) {
 		/*boolean infinityMode = true;
 		boolean timerMode = true;*/
@@ -23,18 +27,12 @@ public class Main {
 		//Temps en secondes de la durée d'une partie (utilisé seulement si timerMode == true)
 		int gameTime = 60;
 
-		/*if (args.length != 0) {
-			System.out.println(args[0]);
-			infinityMode = true;
-		}*/
-
-		//Il n'y a pas de timerMode en dans le mode classique
+		//Il n'y a jamais de timerMode en dans le mode classique
 		if (!infinityMode) {
 			timerMode = false;
 		}
-		//Caractéristiques du jeu
-		//boolean infinityMode = true;
 
+		//Caractéristiques du jeu
 		int width = 26;
 		int height = 20;
 		if (infinityMode) {
@@ -51,6 +49,7 @@ public class Main {
 		Game game = new Game(graphic, width, height, minSpeedInTimerLoops, defaultDensity, infinityMode, timerMode, gameTime);
 		//Création et liason de la grenouille
 		IFrog frog;
+		//Génére la bonne grenouille en fonction du mode de jeu
 		if (infinityMode) {
 			frog = new FrogInf(game);
 		}
@@ -60,22 +59,15 @@ public class Main {
 		game.setFrog(frog);
 		graphic.setFrog(frog);
 		//Création et liaison de l'environnement
-
-		//IEnvironment env = new GivenEnvironment(game);
 		IEnvironment env;
+		//Génére le bon environnement en fonction du mode de jeu
 		if (infinityMode) {
 			env = new EnvInf(game);
 		}
 		else {
 			env = new Environment(game);
 		}
-		//IEnvironment env = new Environment(game);
 		game.setEnvironment(env);
-/*
-		for (int i = 0; i < 40; ++i) {
-			game.update();
-		}*/
-		//Timer gameTime = new Timer(1000);
 
 		//Boucle principale : l'environnement s'actualise tous les tempo milisecondes
 		Timer timer = new Timer(tempo, new ActionListener() {
@@ -90,6 +82,10 @@ public class Main {
 		timer.start();
 	}
 
+	/**
+	 * Lance le menu lors du lancement du programme
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		IFroggerGraphics graphic = new FroggerGraphic(15, 15,true, false,false);
 		graphic.menuScreen();

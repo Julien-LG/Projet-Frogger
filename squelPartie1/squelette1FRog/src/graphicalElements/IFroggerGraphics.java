@@ -1,6 +1,5 @@
 package graphicalElements;
 
-import environment.LaneInf;
 import gameCommons.IFrog;
 
 import java.util.ArrayList;
@@ -12,8 +11,6 @@ public interface IFroggerGraphics {
 	 * @param e
 	 */
     public void add(Element e);
-
-    /*public void addRoads(ArrayList<LaneInf> roads);*/
     
     /**
      * Enlève tous les éléments actuellement affichés
@@ -54,8 +51,6 @@ public interface IFroggerGraphics {
      * Affiche l'état actuel des scores de la partie
      */
     public void scoreScreen();
-
-    //public  void testLable();
 
     /**
      * Lance un écran de fin de partie

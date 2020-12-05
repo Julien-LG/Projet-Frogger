@@ -41,7 +41,7 @@ public class Game {
 	private IFroggerGraphics graphic;
 
 	/**
-	 * 
+	 * Lance une partie
 	 * @param graphic
 	 *            l'interface graphique
 	 * @param width
@@ -54,6 +54,11 @@ public class Game {
 	 *            densite de voiture utilisee par defaut pour les routes
 	 * @param infinityMode
 	 *            indique si le jeu est en mode infi si true
+	 * @param timerMode
+	 *            indique si le jeu est en mode contre la montre si true
+	 * @param gameTime
+ 	 *            indique si la durée d'une partie en contre la montre
+	 *
 	 */
 	public Game(IFroggerGraphics graphic, int width, int height, int minSpeedInTimerLoop, double defaultDensity, boolean infinityMode, boolean timerMode, int gameTime) {
 		super();
@@ -73,64 +78,11 @@ public class Game {
 		this.gameEnd = false;
 	}
 
+	/**
+	 * Récupére le meilleur score obtenu dans le fichier BestScore.txt
+	 * @return le meilleur score précédemment obtenu
+	 */
 	private int getBestScore() {
-		/*String bestScoreClassique = "";
-		String bestScoreInfinity = "";
-		String bestScoreClassiqueTimer = "";
-		String bestScoreInfinityTimer = "";
-
-		try {
-			//File f = new File("src/com/mkyong/data.txt");
-			BufferedReader bRead = new BufferedReader(new FileReader(bestScoreFileName));
-			String readLine = "";
-			System.out.println("Reading file using Buffered Reader");
-
-			int compteur = 0;
-			while ((readLine = bRead.readLine()) != null) {
-				switch(compteur) {
-					case 0:
-						bestScoreClassique = readLine;
-						break;
-					case 1:
-						bestScoreInfinity = readLine;
-						break;
-					case 2:
-						bestScoreClassiqueTimer = readLine;
-						break;
-					case 3:
-						bestScoreInfinityTimer = readLine;
-						break;
-				}
-				compteur++;
-			}
-			bRead.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			try {
-				BufferedWriter bWrite = new BufferedWriter(new FileWriter(bestScoreFileName));
-				bWrite.write("0\n0\n0\n0");
-				bWrite.close();
-			} catch (IOException exep) {
-				exep.printStackTrace();
-			}
-		}
-
-		if (infinityMode) {
-			if (bestScoreInfinity != "") {
-				return Integer.parseInt(bestScoreInfinity);
-			}
-			else {
-				return 0;
-			}
-		}
-		else {
-			if (bestScoreClassique != "") {
-				return Integer.parseInt(bestScoreClassique);
-			}
-			else {
-				return 0;
-			}
-		}*/
 		String result = "0";
 		//Récupération des lignes du fichier "BestScore"
 		ArrayList<String> linesList = ManageFile.extractFile(bestScoreFileName);
@@ -139,12 +91,11 @@ public class Game {
 		if (linesList.size() == 0) {
 			System.out.println("Reset tab");
 			ArrayList<String> emptyLines = new ArrayList<>();
-			emptyLines.add("0");
-			emptyLines.add("0");
-			emptyLines.add("0");
-			emptyLines.add("0");
+			for (int i = 0; i < 4; i++) {
+				emptyLines.add("0");
+			}
 			ManageFile.createFile(bestScoreFileName, emptyLines);
-			linesList = ManageFile.extractFile(bestScoreFileName);
+			//linesList = emptyLines;
 		}
 
 		if (!infinityMode) {
@@ -160,32 +111,13 @@ public class Game {
 	}
 
 	/**
-	 * Mets à jour le fichier BestScore si le meilleur score à été battu
+	 * Mets à jour le fichier BestScore.txt si le meilleur score à été battu
 	 */
 	public void updateBestScore() {
-		//Si le meilleur score est battu
-		/*if (this.maxScore > this.bestScore) {
-			//this.bestScore = this.maxScore;
-
-			//Si mode infinity sans timeMode
-			if (infinityMode && !timerMode){
-				ManageFile.rewriteFile(bestScoreFileName, 1, String.valueOf(maxScore));
-			} //Si mode infinity avec timerMode
-			else if (infinityMode && timerMode){
-				ManageFile.rewriteFile(bestScoreFileName, 3, String.valueOf(maxScore));
-			}
-		} //Le score pour le mode classique est le temps (il faut qu'il soit plus bas que le précédent
-		else if (this.maxScore < this.bestScore && this.bestScore != 0) {
-			//Si mode classique
-			if (!infinityMode) {
-				ManageFile.rewriteFile(bestScoreFileName, 0, String.valueOf(maxScore));
-			}
-		}*/
-
-		//-------------------
+		//Vérification de si le meilleur score pour le mode classique est battu
 		if (!infinityMode &&(this.maxScore < this.bestScore || (bestScore == 0 && this.maxScore > 0))) {
 			ManageFile.rewriteFile(bestScoreFileName, 0, String.valueOf(maxScore));
-		}
+		}	//Vérification pour le mode Infinity & Infinity Timer
 		else if (infinityMode && this.maxScore > this.bestScore) {
 			if (!timerMode) {
 				ManageFile.rewriteFile(bestScoreFileName, 1, String.valueOf(maxScore));
@@ -198,8 +130,7 @@ public class Game {
 
 	/**
 	 * Lie l'objet frog à la partie
-	 * 
-	 * @param frog
+	 * @param frog la grenouille
 	 */
 	public void setFrog(IFrog frog) {
 		this.frog = frog;
@@ -207,15 +138,14 @@ public class Game {
 
 	/**
 	 * Lie l'objet environment a la partie
-	 * 
-	 * @param environment
+	 * @param environment l'environnement
 	 */
 	public void setEnvironment(IEnvironment environment) {
 		this.environment = environment;
 	}
 
 	/**
-	 * 
+	 * Getter de graphic
 	 * @return l'interface graphique
 	 */
 	public IFroggerGraphics getGraphic() {
@@ -225,14 +155,13 @@ public class Game {
 	/**
 	 * Teste si la partie est perdue et lance un écran de fin approprié si tel
 	 * est le cas
-	 * 
 	 * @return true si le partie est perdue
 	 */
 	public boolean testLose() {
-		//if (frog.getPosition().ord  == or frog.getPosition().absc == ){
-		if (!environment.isSafe(new Case(frog.getPosition().absc, frog.getPosition().ord))) {
+		if (!environment.isSafe(frog.getPosition())) {
 			//System.out.println("Perdu !");
 			if (infinityMode) {
+				//Mise à jour du score
 				updateBestScore();
 				if (maxScore > bestScore) {
 					graphic.endGameScreen("New BEST SCORE ! :" + maxScore + "\n Temps: " + timer + "s");
@@ -251,16 +180,16 @@ public class Game {
 	}
 
 	/**
-	 * Teste si la partie est gagnee et lance un écran de fin approprié si tel
+	 * Teste si la partie est gagnée et lance un écran de fin approprié si tel
 	 * est le cas
-	 * 
 	 * @return true si la partie est gagnée
 	 */
 	public boolean testWin() {
 		//Ne fonctionne qu'en mode classique (puisque il n'y a pas de winning postion accessible en mode infinity)
-		if (environment.isWinningPosition(frog.getPosition() /*new Case(frog.getPosition().absc, frog.getPosition().ord)*/)) {
+		if (environment.isWinningPosition(frog.getPosition())) {
 			//System.out.println("GG !");
 			maxScore = timer;
+			//Mise à jour du score
 			updateBestScore();
 			if (maxScore < bestScore) {
 				graphic.endGameScreen("New BEST SCORE ! \n Temps: " + timer + "s");
@@ -271,9 +200,10 @@ public class Game {
 			gameEnd = true;
 			return true;
 		}
-
+		//Termine la partie si le mode contre la montre atteint 0
 		if (infinityMode && timerMode) {
 			if (timer >= gameTime) {
+				//Mise à jour du score
 				updateBestScore();
 				if (maxScore > bestScore) {
 					graphic.endGameScreen("New BEST SCORE ! :" + maxScore + "\n Temps: " + timer + "s");
@@ -281,12 +211,10 @@ public class Game {
 				else {
 					graphic.endGameScreen("GG ! \n Score :" + maxScore + "\n Temps: " + timer + "s");
 				}
-
 				gameEnd = true;
 				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -302,40 +230,37 @@ public class Game {
 	}
 
 	/**
+	 * Ajoute une route en mode Infinity
+	 */
+	public void addRoad() {
+		this.environment.addRoad();
+	}
+
+	/**
 	 * Actualise l'environnement, affiche la grenouille et verifie la fin de
 	 * partie.
 	 */
 	public void update() {
 
 		graphic.clear();
+		//Envoie le score dans FroggerGraphic pour permettre l'affichage en temps réel
 		graphic.getScore(maxScore, bestScore);
+		//Envoie le timer dans FroggerGraphic pour permettre l'affichage en temps réel pour le mode contre la montre
 		if (timerMode || !infinityMode) {
 			graphic.getTimer(timer, gameTime);
 		}
-		//graphic.timeScreen();
-		//graphic.test();
-		//graphic.scoreScreen(maxScore, bestScore);
-		//graphic.testLable();
-
-		/*graphic.addRoads(environment.getRoads());*/
 
 		environment.update();
+		// Si on joue en mode Infinity, la grenouille reste toujours en position 1 sur l'écran
 		if (infinityMode) {
 			this.graphic.add(new Element(frog.getPosition().absc, 1, Color.GREEN, frog.getSprite()));
 		}
 		else {
 			this.graphic.add(new Element(frog.getPosition(), Color.GREEN, frog.getSprite()));
 		}
-
 		testLose();
 		testWin();
 
-
-		//graphic.scoreScreen(maxScore, bestScore);
-
 		updateTimer();
-	}
-	public void addRoad() {
-		this.environment.addRoad();
 	}
 }

@@ -26,12 +26,10 @@ public class ManageFile {
         return linesList;
     }
 
-    //Crée un fichier avec les éléments du tableau en param (un éléement = une ligne)
-
     /**
-     *
+     * Crée un fichier avec les éléments du tableau en param (un élément = une ligne)
      * @param fileName le nom du fichier
-     * @param tab 
+     * @param tab le tabelau de String avec les lignes à mettre dans le fichier
      */
     public static void createFile (String fileName, ArrayList<String> tab) {
         try {
@@ -44,12 +42,23 @@ public class ManageFile {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Remplace le texte d'une ligne par celui en paramétre
+     * @param fileName le nom du fichier
+     * @param nbLine le numéro de la ligne à modifier (0 pour la première ligne)
+     * @param text le texte de remplacement
+     */
     public static void rewriteFile (String fileName, int nbLine, String text) {
         ArrayList<String> list = extractFile(fileName);
         list.set(nbLine, text);
         createFile(fileName, list);
     }
 
+    /**
+     * Affiche toutes les lignes d'un fichier
+     * @param fileName le nom du fichier
+     */
     public static void readFile (String fileName) {
         ArrayList<String> list = extractFile(fileName);
         for (String s : list) {
@@ -57,6 +66,12 @@ public class ManageFile {
         }
     }
 
+    /**
+     * Retourne le texte de la ligne choisie
+     * @param fileName le nom du fichier
+     * @param nbLine le numéro de la ligne
+     * @return le texte
+     */
     public static String getLineFile (String fileName, int nbLine) {
         ArrayList<String> list = extractFile(fileName);
         return list.get(nbLine);

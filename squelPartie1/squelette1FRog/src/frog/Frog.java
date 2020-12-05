@@ -1,14 +1,12 @@
 package frog;
 
 import gameCommons.Game;
-import gameCommons.IEnvironment;
 import gameCommons.IFrog;
 import graphicalElements.Element;
 import util.Case;
 import util.Direction;
 
 import javax.imageio.ImageIO;
-import javax.swing.text.Position;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -17,7 +15,7 @@ import java.io.IOException;
 public class Frog implements IFrog {
 	
 	private Game game;
-	protected Case position;
+	private Case position;
 	private Direction direction;
 	private BufferedImage sprite = null;
 
@@ -26,27 +24,44 @@ public class Frog implements IFrog {
 		this.position = new Case(game.width/2, 0);
 		this.direction = Direction.up;
 
+		//Charge le sprite de la grnouille
 		try {
-			this.sprite = ImageIO.read(new File("frog.png"));
+			this.sprite = ImageIO.read(new File("images/frog.png"));
 		} catch (IOException ioException) {
 			System.out.println(ioException);
 		}
 	}
 
+	/**
+	 * Getter Postion
+	 * @return la Position de la grenouille
+	 */
 	@Override
 	public Case getPosition() {
 		return this.position;
 	}
 
+	/**
+	 * Getter Direction
+	 * @return la Direction de la grenouille
+	 */
 	@Override
 	public Direction getDirection() {
 		return this.direction;
 	}
 
+	/**
+	 * Getter Sprite
+	 * @return le sprite de la grenouille
+	 */
 	public BufferedImage getSprite() {
 		return this.sprite;
 	}
 
+	/**
+	 * Modifie la position de la grenouille en fonction de la touche de clavier enfoncée
+	 * @param key la touche du clavier
+	 */
 	@Override
 	public void move(Direction key) {
 		this.direction = key;

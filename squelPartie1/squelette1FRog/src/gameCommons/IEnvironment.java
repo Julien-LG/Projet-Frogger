@@ -12,8 +12,7 @@ public interface IEnvironment {
 	 * Teste si une case est sure, c'est à dire que la grenouille peut s'y poser
 	 * sans mourir
 	 * 
-	 * @param c
-	 *            la case à tester
+	 * @param c la case à tester
 	 * @return vrai s'il n'y a pas danger
 	 */
 	public boolean isSafe(Case c);
@@ -31,7 +30,6 @@ public interface IEnvironment {
 	 */
 	public void update();
 
-	public ArrayList<LaneInf> getRoads();
 	/**
 	 * Ajoute une route tout en haut du tableau de route
 	 */
