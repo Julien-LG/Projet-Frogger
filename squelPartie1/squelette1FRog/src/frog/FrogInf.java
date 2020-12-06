@@ -97,5 +97,37 @@ public class FrogInf implements IFrog {
         this.game.testLose();
         this.game.testWin();
     }
+    @Override
+    public void Glisse(Direction key) { // Changement
+
+        if (key == Direction.up) {
+            this.position = new Case(this.position.absc, this.position.ord + 1);
+        }
+        if (key == Direction.down) {
+            this.position = new Case(this.position.absc, this.position.ord - 1);
+        }
+        if (key == Direction.left) {
+            this.position = new Case(this.position.absc - 1, this.position.ord);
+        }
+        if (key == Direction.right) {
+            this.position = new Case(this.position.absc + 1, this.position.ord);
+        }
+    }
+
+    public void Bloque(Direction key) { // Changement
+
+        if (key == Direction.up) {
+            this.position = new Case(this.position.absc, this.position.ord - 1);
+        }
+        if (key == Direction.down) {
+            this.position = new Case(this.position.absc, this.position.ord + 1);
+        }
+        if (key == Direction.left) {
+            this.position = new Case(this.position.absc + 1, this.position.ord);
+        }
+        if (key == Direction.right) {
+            this.position = new Case(this.position.absc - 1, this.position.ord);
+        }
+    }
 
 }

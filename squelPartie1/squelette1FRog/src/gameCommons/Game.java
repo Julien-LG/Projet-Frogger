@@ -158,7 +158,7 @@ public class Game {
 	 * @return true si le partie est perdue
 	 */
 	public boolean testLose() {
-		if (!environment.isSafe(frog.getPosition())) {
+		if (!environment.isSafe(frog.getPosition()) && !environment.onTrap(this.frog.getPosition())) {
 			//System.out.println("Perdu !");
 			if (infinityMode) {
 				//Mise à jour du score
@@ -176,6 +176,26 @@ public class Game {
 			gameEnd = true;
 			return true;
 		}
+		return false;
+	}
+	public boolean testGlisse() {
+		// TODO
+
+		if(environment.onGlass(this.frog.getPosition()) == true) { // Changement
+			frog.Glisse(frog.getDirection());
+			return true;
+		}
+
+		return false;
+	}
+	public boolean testBloque() {
+		// TODO
+
+		if(environment.onWall(this.frog.getPosition()) == true) { // Changement
+			frog.Bloque(frog.getDirection());
+			return true;
+		}
+
 		return false;
 	}
 
@@ -250,6 +270,8 @@ public class Game {
 		}
 
 		environment.update();
+		testGlisse(); // Changement
+		testBloque(); // Changement
 		// Si on joue en mode Infinity, la grenouille reste toujours en position 1 sur l'écran
 		if (infinityMode) {
 			this.graphic.add(new Element(frog.getPosition().absc, 1, Color.GREEN, frog.getSprite()));

@@ -16,6 +16,9 @@ public interface IEnvironment {
 	 * @return vrai s'il n'y a pas danger
 	 */
 	public boolean isSafe(Case c);
+	public boolean onTrap(Case c);
+	public boolean onGlass(Case c);
+	public boolean onWall(Case c);
 
 	/**
 	 * Teste si la case est une case d'arrivee

@@ -31,6 +31,13 @@ public interface IFrog {
 	 */
 	public void move(Direction key);
 
+	/**
+	 * Deplace la grenouille encore une fois ou le fait reculer
+	 * @param key
+	 */
+	public void Glisse(Direction key); // Changement
+	public void Bloque(Direction key); // Changement
+
 	//public boolean goUp();
 
 }

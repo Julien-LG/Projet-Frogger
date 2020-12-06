@@ -10,6 +10,9 @@ public class LaneInf {
     private int ord;
     private int speed;
     private ArrayList<CarInf> cars = new ArrayList<>();
+    private ArrayList<Trap> traps = new ArrayList<>(); // Changement
+    private ArrayList<Glass> glasses = new ArrayList<>(); // Changement
+    private ArrayList<Wall> walls = new ArrayList<>(); // Changement
     private boolean leftToRight;
     private double density;
     private int tic = 0; //les tic de l'horloge
@@ -26,6 +29,9 @@ public class LaneInf {
         for (int i = 0; i < 2 * game.width; i++) {
             this.displaceCars(true);
             this.mayAddCar();
+            this.mayAddTrap(); // Changement
+            this.mayAddGlass(); // Changement
+            this.mayAddWall(); // Changement
         }
     }
 
@@ -80,6 +86,9 @@ public class LaneInf {
         else {
             this.displaceCars(true);
             this.mayAddCar();
+            this.mayAddTrap(); // Changement
+            this.mayAddGlass(); // Changement
+            this.mayAddWall(); // Changement
             this.tic = 0;
         }
         // Toutes les voitures se déplacent d'une case au bout d'un nombre "tic
@@ -116,6 +125,30 @@ public class LaneInf {
         }
         return true;
     }
+    public boolean onTrap(Case c) { // Comme isSafe, il verifie si frog est sur la meme case que Trap
+        for(Trap trap : this.traps) {
+            if(trap.aboveCase(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean onGlass(Case c) { // Changement
+        for(Glass glass : this.glasses) {
+            if(glass.aboveCase(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean onWall(Case c) { // Changement
+        for(Wall wall : this.walls) {
+            if(wall.aboveCase(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * Ajoute une voiture au début de la voie avec probabilité égale à la
@@ -125,6 +158,28 @@ public class LaneInf {
         if (isSafe(getFirstCase()) && isSafe(getBeforeFirstCase())) {
             if (game.randomGen.nextDouble() < density) {
                 cars.add(new CarInf(game, getBeforeFirstCase(), leftToRight));
+            }
+        }
+    }
+
+    private void mayAddTrap() { // Il sert à créer les pieges quand la partie commence:
+        if (isSafe(getFirstCase()) && isSafe(getBeforeFirstCase())) {
+            if (game.randomGen.nextDouble() < density/2) { // Sa probabilité d'apparaitre est plus faible que Car
+                traps.add(new Trap(game, getBeforeFirstCase(), leftToRight));
+            }
+        }
+    }
+    private void mayAddGlass() { // Idem
+        if (isSafe(getFirstCase()) && isSafe(getBeforeFirstCase())) {
+            if (game.randomGen.nextDouble() < density/2) {
+                glasses.add(new Glass(game, getBeforeFirstCase(), leftToRight));
+            }
+        }
+    }
+    private void mayAddWall() { // Idem
+        if (isSafe(getFirstCase()) && isSafe(getBeforeFirstCase())) {
+            if (game.randomGen.nextDouble() < density/2) {
+                walls.add(new Wall(game, getBeforeFirstCase()));
             }
         }
     }

@@ -25,6 +25,16 @@ public class Environment implements IEnvironment {
         return this.roads.get(c.ord).isSafe(c);
     }
 
+    public boolean onTrap(Case c) { // Changement
+        return this.roads.get(c.ord).onTrap(c);
+    }
+    public boolean onGlass(Case c) { // Changement
+        return this.roads.get(c.ord).onGlass(c);
+    }
+    public boolean onWall(Case c) { // Changement
+        return this.roads.get(c.ord).onWall(c);
+    }
+
     @Override
     public boolean isWinningPosition(Case c) {
         return c.ord == game.height - 1;
