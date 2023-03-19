@@ -3,7 +3,7 @@
 Il s'agit d'un jeu basé sur le jeu Frogger de Konami (1981).
 Ce programme est mon projet de fin de semestre pour le cours de programmation objet de L2 Informatique à L'Université Paris-Saclay.
 
-`2020` - `Java`, `Swing`, `Langage Objet`, `Jeu`, `IntelliJ`
+`2020` - `Java`, `Swing`, `Langage Objet`, `MVC`, `Jeu`, `IntelliJ`
 
 ### Menu
 ![Menu](CapturesDuProgrammes/1.png)
